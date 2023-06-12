@@ -1,0 +1,52 @@
+$primary-color: #303133;
+$hover-bg-color: rgba(0, 0, 0, 0.2);
+$active-color: rgba(0, 0, 0, 0.7);
+$color: #fff;
+
+.left-menu {
+    height: 100%;
+    background-color: $primary-color;
+}
+.el-menu {
+    background-color: $primary-color;
+    border: none;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.left-menu-item>.el-submenu__title,
+.left-menu-item.el-menu-item {
+    z-index: 1;
+    background: transparent;
+    color: $color;
+}
+
+.left-menu-item>.el-submenu__title:hover,
+.left-menu-item.el-menu-item:hover,
+.left-menu-item.el-menu-item.is-active
+ {
+    color: $color;
+}
+
+.left-menu-item.el-menu-item.is-active
+ {
+    background-color: $active-color;
+    color: $color;
+}
+
+.left-menu-item>.el-submenu__title:before,
+.left-menu-item.el-menu-item:before {
+    z-index: -1;
+    width: 0;
+    content: '';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: width 0.2s ease-in;
+    background-color: $hover-bg-color;
+}
+
+.left-menu-item>.el-submenu__title:hover:before,
+.left-menu-item.el-menu-item:hover:before {
+    width: 100%;
+}
