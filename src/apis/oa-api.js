@@ -1,3 +1,5 @@
+/* eslint-disable */
+// 智能人事
 const API = {
   KEY: 'OneForAll.OA',
   SETTING: {
@@ -15,9 +17,26 @@ const API = {
     URL: '/api/OAPersonEntrys',
     BATCH_DELETE: '/api/OAPersonEntrys/Batch/IsDeleted'
   },
+  // 入职档案
   PERSONAL_ENTRY: {
     URL: '/api/OAPersonalEntryFiles',
-    SETTING: '/api/OAPersonalEntryFiles/{id}/Settings'
+    SETTING: '/api/OAPersonalEntryFiles/{id}/Settings',
+    UPLOAD_FILE: (id) => `/api/OAPersonalEntryFiles/${id}/Files`,
+  },
+  // 个人档案
+  PERSONAL_FILE: {
+    URL: '/api/OAPersonalFiles',
+    HISTORY: '/api/OAPersonalTeamHistories'
+  },
+  PERSONAL_SCHEDULE: {
+    URL: '/api/OAPersonalSchedules',
+    DATE: (date) => `/api/OAPersonalSchedules/${date}`,
+    BATCH_DELETE: '/api/OAPersonEntrys/Batch/IsDeleted',
+    CLOSE: (id) => `/api/OAPersonalSchedules/${id}/IsClosed`
+  },
+  DASHBOARD: {
+    PERSON: '/api/OADashboard/NewPersons',
+    STATISTICS: '/api/OADashboard/Statistics'
   }
 }
 

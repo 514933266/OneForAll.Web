@@ -1,436 +1,636 @@
 // 默认皮肤
-@import './theme/index.css';
-// 左侧导航
-@import './left-menu.scss';
+@import "./theme/index.css";
+// 左侧菜单
+@import "./left-menu.scss";
 // 浏览器
-@import './browser.css';
+@import "./browser.scss";
 
-$rem: .75rem;
-$primary-color: #409EFF;
-$secondary-color:#2c3e50;
-$danger-color:#FF4351;
-$success-color: #A5DE37;
-$second-color: #253443;
-$warning-color: #FEAE1B;
+// 主色
+$primary-color: #409eff;
+$danger-color: #ff4351;
 $invalid-color: #f56c6c;
-$watermark-color: #888;
+$success-color: #67C23A;
+$warning-color: #feae1b;
+// 字体色
+$regular-color: #606266;
+$secondary-color: #909399;
+$placeholder-color: #a8abb2;
+$disabled-color: #c0c4cc;
+$info-color: #606266;
+$grey-color: #a7abba;
+$watermark-color: #f2f6fc;
 $border-color: #ebeef5;
 $remark-color: #99a9bf;
-$label-color:#99a9bf;
-$border-color: #EBEEF5;
+$label-color: #99a9bf;
+$title-color: #2e3543;
+// 边框色
+$border-color: #dcdfe6;
+$border-light-color: #e4e7ed;
+$border-lighter-color: #ebeef5;
+$border-exlight-color: #f2f6fc;
 
-// 文本颜色
-.ofa-label {color: $label-color;}
-.ofa-text-primary { color: $primary-color !important; }
-.ofa-text-danger { color: $danger-color !important; }
-.ofa-text-success { color: $success-color !important; }
-.ofa-text-warning { color: $warning-color !important; }
-.ofa-text-grey { color: $remark-color !important; }
-
-// 背景
-.ofa-bg-primary { background-color: $primary-color !important; }
-.ofa-bg-danger { background-color: $danger-color !important; }
-.ofa-bg-success { background-color: $success-color !important; }
-.ofa-bg-warning { background-color: $warning-color !important; }
-.ofa-bg-grey { background-color: $remark-color !important; }
-
-// 按钮
-.ofa-button {
-    color: $label-color;
+// 基础
+html,
+* {
+  font-size: 14px;
 }
 
-.ofa-button-danger {
-    color: $label-color;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $danger-color;
-        border-color: rgb(253, 226, 226);
-        background-color: rgb(254, 240, 240);
-    }
+body {
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.ofa-button-warning {
-    color: $label-color;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $warning-color;
-        border-color: rgb(250, 236, 216);
-        background-color: rgb(253, 246, 236);
-    }
+ul {
+  margin: 0;
+  padding: 0;
 }
 
-.ofa-button-success {
-    color: $label-color;
-
-    &:hover,
-    &:active,
-    &:focus {
-        color: $success-color;
-        border-color: rgb(225, 243, 216);
-        background-color: #f0f9eb;
-    }
+li {
+  list-style: none;
 }
 
-// 列表头部
-.ofa-work-box {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    border: none;
-    padding: 20px;
-
-    .title {
-        font-size: 1rem;
-    }
-
-    >span {
-        display: flex;
-        align-items: center;
-        color: $label-color;
-    }
-
-    .ofa-button-dropdown {
-        margin-left: 10px;
-
-        button {
-            color: $label-color;
-        }
-    }
+#app {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
-.ofa-work-box.border {
-    border: 1px solid $border-color;
-    border-bottom: transparent;
-}
-
-// 列表
+// 布局
 .ofa-container {
-    display: flex;
-    overflow-x: hidden;
-
-    .el-card__header {
-        position: relative;
-        font-size: 14px;
-
-        &:before {
-            content: ' ';
-            background: $primary-color;
-            padding: 2px;
-            width: 2px;
-            height: 17px;
-            display: inline-block;
-            left: 0;
-            position: absolute;
-        }
-    }
-
-    .ofa-work-box {
-        padding: 0;
-    }
-
-    .table-card {
-        flex: 1;
-        margin-top: 20px;
-    }
+  display: flex;
+  overflow-x: hidden;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
 }
 
 .ofa-container.column {
-    flex-direction: column;
+  flex-direction: column;
+}
+
+// 文本颜色
+.ofa-label {
+  color: $label-color;
+}
+
+.ofa-text-primary {
+  color: $primary-color !important;
+}
+
+.ofa-text-danger {
+  color: $danger-color !important;
+}
+
+.ofa-text-success {
+  color: $success-color !important;
+}
+
+.ofa-text-warning {
+  color: $warning-color !important;
+}
+
+.ofa-text-regular {
+  color: $regular-color !important;
+}
+
+.ofa-text-secondary {
+  color: $secondary-color !important;
+}
+
+.ofa-text-placeholder {
+  color: $placeholder-color !important;
+}
+
+.ofa-text-disabled {
+  color: $disabled-color !important;
+}
+
+.ofa-text-info {
+  color: $info-color !important;
+}
+
+.ofa-text-grey {
+  color: $grey-color !important;
+}
+
+.ofa-text-title {
+  color: $title-color !important;
+}
+
+.ofa-text-remark {
+  color: $remark-color !important;
+}
+
+.ofa-text-watermark {
+  color: $watermark-color !important;
+}
+
+.ofa-text-label {
+  color: $label-color !important;
+}
+
+.ofa-text-primary.hover,
+.ofa-text-danger.hover,
+.ofa-text-success.hover,
+.ofa-text-warning.hover,
+.ofa-text-regular.hover,
+.ofa-text-secondary.hover,
+.ofa-text-placeholder.hover,
+.ofa-text-disabled.hover,
+.ofa-text-info.hover,
+.ofa-text-grey.hover,
+.ofa-text-title.hover,
+.ofa-text-remark.hover,
+.ofa-text-watermark.hover{
+  &:hover {
+    opacity: 0.8 !important;
+    transition: color 0.3s ease;
+  }
+}
+
+// 背景
+.ofa-bg-primary {
+  background: $primary-color !important;
+}
+
+.ofa-bg-danger {
+  background: $danger-color !important;
+}
+
+.ofa-bg-success {
+  background: $success-color !important;
+}
+
+.ofa-bg-warning {
+  background: $warning-color !important;
+}
+
+.ofa-bg-regular {
+  background: $regular-color !important;
+}
+
+.ofa-bg-secondary {
+  background: $secondary-color !important;
+}
+
+.ofa-bg-placeholder {
+  background: $placeholder-color !important;
+}
+
+.ofa-bg-disabled {
+  background: $disabled-color !important;
+}
+
+.ofa-bg-info {
+  background: $info-color !important;
+}
+
+.ofa-bg-grey {
+  background: $grey-color !important;
+}
+
+.ofa-bg-title {
+  background: $title-color !important;
+}
+
+.ofa-bg-remark {
+  background: $remark-color !important;
+}
+
+.ofa-bg-watermark {
+  background: $watermark-color !important;
+}
+
+// 按钮
+.ofa-button {
+  color: $label-color;
+}
+
+.ofa-button-danger {
+  color: $label-color;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $danger-color;
+    border-color: rgb(253, 226, 226);
+    background-color: rgb(254, 240, 240);
+  }
+}
+
+.ofa-button-warning {
+  color: $label-color;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $warning-color;
+    border-color: rgb(250, 236, 216);
+    background-color: rgb(253, 246, 236);
+  }
+}
+
+.ofa-button-success {
+  color: $label-color;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $success-color;
+    border-color: rgb(225, 243, 216);
+    background-color: #f0f9eb;
+  }
+}
+
+// 表格
+.ofa-table-header {
+  background-color: #f2f6fc !important;
+  border-radius: 10px;
 }
 
 // 表单
 .ofa-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+
+  .form-header {
+    background-color: #fff;
+.form-header-text{
+  font-size: 16px;
+}
+    .el-card__body {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: nowrap;
+      padding: 15px 20px;
+      button {
+        margin-left: 10px;
+      }
+
+      .button-box {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  .form-content {
+    border-radius: 10px;
+    flex: 1;
+    background: #fff;
+    margin-top: 20px;
+  }
+
+  .row {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .column {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0 10px;
+  }
 
-    .form-header {
-        background-color: #fff;
+  .el-divider__text {
+    color: $label-color !important;
+  }
 
-        .el-card__body {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: nowrap;
+  .el-card {
+    border: none;
+    border-radius: 10px;
+  }
 
-            button {
-                margin-left: 10px;
-            }
+  // 页头
+  .el-page-header__left {
+    color: $label-color;
 
-            .button-box {
-                display: flex;
-                justify-content: flex-end;
-            }
-        }
+    &:hover {
+      color: $primary-color;
     }
+  }
 
-    .form-content {
-        flex: 1;
-        background: #fff;
+  // 卡片
+  .el-card__header {
+    position: relative;
+    font-size: 16px;
+    color: #666;
+
+    &:before {
+      content: " ";
+      background: $primary-color;
+      padding: 2px;
+      width: 2px;
+      height: 17px;
+      display: inline-block;
+      left: 0;
+      position: absolute;
     }
+  }
 
-    .row {
-        display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-    }
+  .el-form-item {
+    margin-right: 20px;
+  }
 
-    .column {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-    }
+  .el-form-item__label {
+    color: $label-color;
+    padding-left: 10px;
+  }
 
-    .el-divider__text {
-        color: $label-color !important;
-    }
+  .el-date-editor,
+  .el-input,
+  .el-select {
+    width: 200px;
+  }
 
-    .el-card {
-        margin-bottom: 20px;
-    }
+  input {
+    width: 100%;
+  }
 
-    // 页头
-    .el-page-header__left {
-        color: $label-color;
-
-        &:hover {
-            color: $primary-color;
-        }
-    }
-
-    // 卡片
-    .el-card__header {
-        position: relative;
-        font-size: 16px;
-        color: #666;
-
-        &:before {
-            content: ' ';
-            background: $primary-color;
-            padding: 2px;
-            width: 2px;
-            height: 17px;
-            display: inline-block;
-            left: 0;
-            position: absolute;
-        }
-    }
-
-    .el-form-item {
-        margin-right: 20px;
-    }
-
-    .el-form-item__label {
-        color: $label-color;
-        padding-left: 10px;
-    }
-
-    .el-date-editor,
-    .el-input,
-    .el-select {
-        width: 200px;
-    }
-
-    input {
-        width: 100%;
-    }
-
-    .el-range-separator {
-        color: $label-color;
-    }
+  .el-range-separator {
+    color: $label-color;
+  }
 }
-
+.ofa-form.no-padding {
+  padding: 0;
+}
 .ofa-form .is-disabled,
 .ofa-form.disabled {
 
-    .el-checkbox__label,
-    textarea,
-    input {
-        color: #666 !important;
-    }
+  .el-checkbox__label,
+  textarea,
+  input {
+    color: #666 !important;
+  }
 }
 
 // 抽屉
 .ofa-drawer {
-
+  .el-drawer__header {
     .title {
-        padding: 20px;
-        font-weight: bold;
-
-        span {
-            font-size: 1.45rem;
-        }
-
-        label {
-            margin-left: 10px;
-            font-size: 1rem;
-        }
+      font-size: 1.5rem;
+      font-weight: bolder;
+      color: $regular-color;
     }
 
-    .el-drawer__body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        overflow-y: auto;
+    .title-tips {
+      font-size: 1rem;
+      color: $secondary-color;
+      margin-left: 10px;
     }
 
-    .el-form {
-        padding: 0 20px;
+    &:before {
+      content: " ";
+      background: $primary-color;
+      padding: 2px;
+      width: 2px;
+      height: 17px;
+      display: inline-block;
+      left: 0;
+      position: absolute;
+    }
+  }
 
-        .el-cascader,
-        .el-select,
-        .el-date-editor {
-            width: 100%;
-        }
+  .el-drawer__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+  }
 
-        .el-form-item {
-            margin: 0 0 14px 0;
-        }
+  .el-form {
+    padding: 0 20px;
 
-        .el-form-item__label {
-            color: $label-color;
-        }
+    .el-cascader,
+    .el-select,
+    .el-date-editor {
+      width: 100%;
     }
 
-    .footer {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100px;
-        padding: 20px;
-        border-top: 1px solid $border-color;
-
-        button {
-            width: 100%;
-            border-radius: 0;
-        }
+    .el-form-item {
+      margin: 0 0 14px 0;
     }
+
+    .el-form-item__label {
+      color: $label-color;
+    }
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100px;
+    padding: 20px;
+    border-top: 1px solid $border-color;
+
+    button {
+      width: 100%;
+      border-radius: 0;
+    }
+  }
 }
 
 // 表格
 .ofa-table {
-    margin-bottom: 25px;
-    border-bottom: 0;
+  margin-bottom: 25px;
+  border-bottom: 0;
 
-    .el-table__fixed,
-    .el-table__fixed-left,
-    .el-table__fixed-right {
-        background: #fff;
-    }
+  .el-table__header {
+    background-color: $border-exlight-color;
+    border-radius: 10px;
+    margin-bottom: 10px;
 
-    .warning-row {
-        background: rgba(254, 174, 27, 0.1);
+    th,
+    tr {
+      padding: 0.75rem 0;
+      background-color: transparent !important;
+      border: none;
+      color: $regular-color;
     }
+  }
 
-    .success-row {
-        background-color: rgba(165, 222, 55, 0.1)
-    }
+  .warning-row {
+    background: rgba(254, 174, 27, 0.1);
+  }
 
-    .danger-row {
-        background: rgba(255, 67, 81, 0.1);
-    }
+  .success-row {
+    background-color: rgba(165, 222, 55, 0.1);
+  }
 
-    .el-cascader,
-    .el-input,
-    .el-date-editor,
-    .el-select,
-    input {
-        width: 100%;
-    }
+  .danger-row {
+    background: rgba(255, 67, 81, 0.1);
+  }
 
-    .el-form-item {
-        margin-bottom: 0;
-    }
+  .el-cascader,
+  .el-input,
+  .el-date-editor,
+  .el-select,
+  input {
+    width: 100%;
+  }
 
-    .el-form-item__content {
-        margin-left: 0 !important;
-    }
+  .el-form-item {
+    margin-bottom: 0;
+  }
+
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
 }
 
 // 对话框
 .ofa-dialog {
-    .el-dialog__header {
-        border-bottom: 1px solid $border-color;
-        position: relative;
-        font-size: 16px;
-        color: #666;
+  border-radius: 10px;
 
-        &:before {
-            content: ' ';
-            background: $primary-color;
-            padding: 2px;
-            width: 2px;
-            height: 17px;
-            display: inline-block;
-            left: 0;
-            position: absolute;
-        }
+  .el-dialog__header {
+    border-bottom: 1px solid $border-color;
+    position: relative;
+    font-size: 16px;
+    color: $title-color;
+
+    &:before {
+      content: " ";
+      background: $primary-color;
+      padding: 2px;
+      width: 2px;
+      height: 17px;
+      display: inline-block;
+      left: 0;
+      position: absolute;
     }
+  }
+}
+
+// 树节点
+.ofa-tree {
+
+  .el-tree-node__content {
+    margin: 10px 10px 0 10px !important;
+    padding: 10px 0 !important;
+    border-radius: 10px;
+  }
+
+  .el-checkbox {
+    margin-bottom: 0;
+  }
+
+  .tree-node {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .875rem;
+    padding-right: 8px;
+    width: 100%;
+  }
+}
+
+// 卡片
+.ofa-card {
+  margin-bottom: 20px;
+
+  .el-card__header {
+    position: relative;
+    color: $title-color;
+
+    &:before {
+      content: " ";
+      background: $primary-color;
+      padding: 2px;
+      width: 2px;
+      height: 1.25rem;
+      display: inline-block;
+      left: 0;
+      position: absolute;
+    }
+  }
+
+  .card-header-label {
+    font-size: 1rem;
+  }
+}
+
+// 消息弹窗
+.el-message-box {
+  border-radius: 10px;
 }
 
 #nprogress .bar,
 .spinner div {
-    background: #409EFF !important
-}
-
-html {
-    font-size: 16px
-}
-
-body {
-    background-color: #ebeef5;
-    margin: 0;
-    padding: 0;
-    color: #303133;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
-
-ul {
-    margin: 0;
-    padding: 0;
-}
-
-li {
-    list-style: none;
+  background: #409eff !important;
 }
 
 a,
 a:hover,
 a:focus,
 a:active {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 // element-ui
 body {
-
-    .el-table {
-        th {
-            .cell {
-                display: block; // 解决下边框被隐藏bug
-            }
-        }
-
-        th.gutter {
-            display: table-cell !important; // 标题和内容不对齐bug
-        }
+  .el-table {
+    th {
+      .cell {
+        display: block; // 解决下边框被隐藏bug
+      }
     }
+
+    th.gutter {
+      display: table-cell !important; // 标题和内容不对齐bug
+    }
+  }
 }
 
 // 解决tinymce和el-dialog层级冲突问题
 .tox-tinymce-aux {
-    z-index: 9999 !important;
+  z-index: 9999 !important;
 }
 
 // 主页样式
 .main-content>.left-content {
-    background-color: #fff;
+  background-color: #fff;
+}
+
+.el-dropdown-menu {
+  border-radius: 12px;
+}
+
+// 错误页全局样式
+.error-page-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+
+  .error-text {
+    margin-top: 13px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2e3543;
+    margin-bottom: 6px;
+  }
+
+  .error-desc {
+    font-size: 12px;
+    font-weight: 500;
+    color: #a7abba;
+  }
+
+  .error-code {
+    color: #ff3c3c;
+    margin-right: 6px;
+  }
 }

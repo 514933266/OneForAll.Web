@@ -1,8 +1,9 @@
 <template>
-  <div class="update-pwd-box">
-    <div class="header">修改密码</div>
-    <div class="content">
-      <el-form :model="entity" status-icon :rules="validationRules" ref="form" class="info-form" label-width="120px">
+  <el-container class="ofa-container column">
+    <el-header class="header">修改密码</el-header>
+    <el-main class="content">
+      <el-form :model="entity" status-icon :rules="validationRules" ref="form" class="info-form" label-width="120px"
+        size="small">
         <el-form-item label="旧密码" prop="old">
           <el-input :type="show.old ? 'text' : 'password'" v-model="entity.old" placeholder="请输入旧密码">
             <font-awesome-icon slot="prefix" fas :icon="show.old ? 'eye' : 'eye-slash'" @click="show.old = !show.old">
@@ -27,12 +28,14 @@
               @click="show.repeat = !show.repeat"></font-awesome-icon>
           </el-input>
         </el-form-item>
-        <el-button type="primary" @click="submit">
-          <font-awesome-icon fas icon="save"></font-awesome-icon>&nbsp;确定
-        </el-button>
+        <el-form-item>
+          <el-button type="primary" @click="submit" size="small">
+            <font-awesome-icon fas icon="save"></font-awesome-icon>&nbsp;确定
+          </el-button>
+        </el-form-item>
       </el-form>
-    </div>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -42,7 +45,7 @@ import { LOGIN } from '../../router/base-router'
 import { CLEAR_TOKEN } from '../../store/mutation-types'
 
 export default {
-  name: 'Password',
+  name: 'PersonalPassword',
   data () {
     const validatePassword = (rule, value, callback) => {
       if (value !== this.entity.new) {
@@ -107,12 +110,7 @@ export default {
 /deep/.info-form {
 
   .el-form-item__label {
-    font-size: .75rem;
     color: #99a9bf;
-  }
-
-  .el-form-item__content {
-    font-size: .75rem;
   }
 }
 

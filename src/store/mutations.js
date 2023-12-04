@@ -2,7 +2,9 @@ import VueCookies from 'vue-cookies'
 import {
   SET_TOKEN, CLEAR_TOKEN, SET_OAUTH_REFRESHING,
   SET_USER, CLEAR_LOGIN, SET_TENANT, SET_AXIOS_URL,
-  SET_CLIENT, ADD_MODULE, SET_MODULE_LOADDONE
+  SET_CLIENT, ADD_MODULE, SET_MODULE_LOADDONE,
+  SET_ACTIVE_MENU_INDEX, ADD_BREADCRUMB_HISTORY, SET_BREADCRUMB,
+  ADD_MENU_HISTORY, SET_MENUS
 } from './mutation-types'
 
 const mutations = {
@@ -48,7 +50,48 @@ const mutations = {
     if (m) {
       m.loading = false
     }
+  },
+  [SET_ACTIVE_MENU_INDEX] (state, e) {
+    state.activeMenuIndex = e
+  },
+  [ADD_BREADCRUMB_HISTORY] (state, e) {
+    const item = e[e.length - 1]
+    const index = state.breadcrumbHistorys.findIndex(w => w.key === item.Id)
+    state.breadcrumbHistorys.unshift({ key: item.Id, value: e })
+    if (index > -1) {
+      state.breadcrumbHistorys.splice((index + 1), 1)
+    }
+  },
+  [SET_BREADCRUMB]  (state, id) {
+    const index = state.breadcrumbHistorys.findIndex(w => w.key === id)
+    if (index > -1) {
+      const item = state.breadcrumbHistorys[index]
+      state.breadcrumbHistorys.unshift({ key: item.key, value: item.value })
+      state.breadcrumbHistorys.splice((index + 1), 1)
+    }
+  },
+  [ADD_MENU_HISTORY] (state, e) {
+    const arr = Object.assign([], state.menuHistorys)
+    const index = arr.findIndex(w => w.Id === e.Id)
+    if (index > -1) {
+      arr.splice(index, 1)
+    }
+    arr.unshift(e)
+    if (arr.length > 10) {
+      arr.pop()
+    }
+    state.menuHistorys = arr
+    VueCookies.set('menuHistorys', arr)
+  },
+  [SET_MENUS] (state, e) {
+    const arr = convertMenuTreeToArray(e).filter(w => w.Type === 2)
+    state.menus = arr
   }
+}
+
+/* 将树形数据转换为一维数组 */
+function convertMenuTreeToArray (treeArray) {
+  return [].concat(...treeArray.map(item => [].concat(item, ...convertMenuTreeToArray(item.Children))))
 }
 
 export default mutations

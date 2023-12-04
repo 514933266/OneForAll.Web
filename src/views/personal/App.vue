@@ -1,55 +1,54 @@
 <template>
   <div class="personal-box">
-    <el-tabs tab-position="left" type="border-card">
-      <el-tab-pane>
-        <span slot="label">
-          <font-awesome-icon fas icon="user-tag"></font-awesome-icon>&nbsp;个人资料
-        </span>
-        <info></info>
-      </el-tab-pane>
-      <el-tab-pane>
-        <span slot="label">
-          <font-awesome-icon fas icon="unlock-alt"></font-awesome-icon>&nbsp;修改密码
-        </span>
-        <password></password>
-      </el-tab-pane>
-    </el-tabs>
+    <!-- 面板 -->
+    <panel class="container-box"></panel>
+    <div class="container-bottom">
+      <!-- 日程 -->
+      <schedule class="container-box schedule-box"></schedule>
+      <div class="container-right">
+        <!-- 待办事项 -->
+        <backlog class="container-right-box"></backlog>
+        <!-- 活跃度 -->
+        <liveness class="container-right-box"></liveness>
+        <!-- 站内信 -->
+        <message class="container-right-box"></message>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Info from './Info'
-import Password from './Password'
+import Panel from './_components/Panel'
+import Schedule from './_components/Schedule'
+import Backlog from './_components/Backlog'
+import Liveness from './_components/Liveness'
+import Message from './_components/Message'
 import { PERSONAL } from '../../router/base-router'
 
 export default {
   name: PERSONAL.name,
-  components: { Info, Password }
+  components: { Panel, Schedule, Backlog, Liveness, Message }
 }
 </script>
 
 <style lang="scss" scoped>
 .personal-box {
-  display: flex;
-  min-height: 980px;
-  width: 100%;
-
   /deep/.el-tabs {
     width: 100%;
-    font-size: .75rem;
+    font-size: 0.75rem;
 
     .el-tabs__item {
-      font-size: .75rem;
+      font-size: 0.75rem;
     }
 
     svg {
-      width: .75rem;
-      height: .75rem;
+      width: 0.75rem;
+      height: 0.75rem;
     }
 
     .header {
       padding: 0.75rem 0;
-      font-size: .75rem;
+      font-size: 0.75rem;
       text-align: left;
       border-bottom: 1px solid #ebeef5;
     }
@@ -59,5 +58,34 @@ export default {
       margin-top: 25px;
     }
   }
+}
+.container-box {
+  background: #ffffff;
+  border-radius: 20px;
+}
+
+.container-bottom {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+.container-right {
+  flex: 1;
+  min-width: 403px;
+  .container-right-box {
+    background: #ffffff;
+    border-radius: 20px;
+    min-width: 403px;
+    margin-bottom: 30px;
+  }
+  .container-right-box:last-child {
+    margin-bottom: 0px;
+  }
+}
+.schedule-box {
+  flex: 2;
+  // min-width: 781px;
+  // max-height: 884px;
 }
 </style>

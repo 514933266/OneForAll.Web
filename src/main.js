@@ -18,6 +18,7 @@ import 'jquery'
 import './assets/js/string-helper.js'
 import './assets/js/date-helper.js'
 import './assets/js/drag-dialog'
+import moment from 'moment'
 
 // UI框架 ElementUI
 import ElementUI from 'element-ui'
@@ -62,6 +63,7 @@ Vue.use(ElementUI)
 Vue.use(VueAxios, Axios)
 Vue.use(Print)
 Vue.config.productionTip = false
+Vue.prototype.$moment = moment
 
 const router = Router
 const store = Store
@@ -75,6 +77,19 @@ var RootVue = new Vue({
     }
   },
   methods: {
+    close (route) {
+      const browser = this.$children[0].$children[0].$refs.browser
+      if (!browser) {
+        const interval = setInterval(() => {
+          if (browser) {
+            clearInterval(interval)
+            browser.closeTab(route)
+          }
+        }, 500)
+      } else {
+        browser.closeTab(route)
+      }
+    },
     navigate (route) {
       const browser = this.$children[0].$children[0].$refs.browser
       if (!browser) {

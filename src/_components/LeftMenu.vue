@@ -1,11 +1,27 @@
 <template>
-  <el-menu class="left-menu" :collapse="collapse" :unique-opened="true">
-    <menu-item :isModule="isModule" :list="list" @select="select" :collapse="collapse"></menu-item>
+  <el-menu :collapse="collapse" :unique-opened="true" :default-active="activeIndex" @select="clickNode" class="left-menu">
+    <el-button type="primary" :icon="collapse ? 'el-icon-arrow-right' : 'el-icon-arrow-left'" circle size="mini"
+      class="collapse-icon" @click="collapse = !collapse" />
+    <div class="logo-title" v-show="!collapse">
+      <el-image :src="require('../assets/img/logo-title.png')" />
+    </div>
+    <div class="login-title-min" v-show="collapse">
+      <el-image :src="require('../assets/img/logo-title-min.png')" />
+    </div>
+    <div class="menu-box">
+      <el-menu-item :index="homeItem.Id" ref="homeMenu">
+        <font-awesome-icon fas :icon="homeItem.Icon" class="icon"></font-awesome-icon>
+        <span class="menu-name">{{homeItem.Name}}</span>
+      </el-menu-item>
+      <menu-item :isModule="isModule" :list="list" :collapse="collapse"></menu-item>
+    </div>
   </el-menu>
 </template>
 
 <script>
 import MenuItem from './LeftMenuItem'
+import { WELCOME } from '../router/base-router'
+import { ADD_BREADCRUMB_HISTORY } from '../store/mutation-types'
 
 // 左菜单
 export default {
@@ -14,19 +30,29 @@ export default {
     value: {
       type: Array
     },
-    // 是否折叠
-    collapse: {
-      type: Boolean,
-      default: false
-    },
     // 是否组件模式
     isModule: { type: Boolean }
   },
   data () {
     return {
-      guid: '00000000-0000-0000-0000-000000000000',
+      collapse: false, // 菜单折叠
       loading: false, // 加载中
-      list: []
+      list: [],
+      homeItem: {
+        Id: '0',
+        Name: '首页',
+        Type: 2,
+        OpenType: 1,
+        Icon: 'home',
+        Url: WELCOME.name,
+        IsDefault: true,
+        Children: []
+      }
+    }
+  },
+  computed: {
+    activeIndex () {
+      return this.$store.state.activeMenuIndex
     }
   },
   watch: {
@@ -38,7 +64,9 @@ export default {
     init () {
       if (this.loading) return false
     },
-    select (menu) {
+    clickNode (index) {
+      const path = (index === '0' ? [this.homeItem] : [])
+      const menu = (index === '0' ? this.homeItem : this.findMenu(this.list, index, path))
       const mode = this.checkMode(menu)
       if (mode.moudle) {
         return false
@@ -47,19 +75,24 @@ export default {
       } else {
         this.navigateTo(menu)
       }
+      this.$nextTick(() => {
+        this.$store.commit(ADD_BREADCRUMB_HISTORY, path.reverse())
+      })
     },
-    findMenu (menus, id) {
+    findMenu (menus, id, path) {
       let item
       if (!menus) return false
       for (let index = 0; index < menus.length; index++) {
         const element = menus[index]
         if (element.Id === id) {
           item = element
+          path.push(element)
           break
         } else {
-          const deep = this.findMenu(element.Children, id)
+          const deep = this.findMenu(element.Children, id, path)
           if (deep) {
             item = deep
+            path.push(element)
             break
           }
         }
@@ -92,12 +125,14 @@ export default {
     postNavigate (menu) {
       if (menu.Url && menu.Url.length > 0) {
         this.$root.navigate({
+          id: menu.Id,
           url: menu.Url,
           name: menu.Url,
           label: menu.Name,
           isBlank: menu.IsBlank || menu.OpenType === 1,
           params: menu.Params,
-          icon: menu.Icon
+          icon: menu.Icon,
+          isDefault: menu.IsDefault
         })
       }
     }
@@ -107,29 +142,82 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$left-width: 300px;
-$left-collapse-width: 60px;
+$left-width: 220px;
+$left-collapse-width: 100px;
+
+.left-menu {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.05);
+  height: 100%;
+
+  .collapse-icon {
+    position: absolute;
+    top: 29px;
+    right: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    z-index: 99999;
+  }
+
+  .logo-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    margin: 0 20px;
+    border-bottom: 1px solid #eaebec;
+
+    .el-image {
+      height: 40px;
+      width: 150px;
+    }
+  }
+
+  .login-title-min {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0 29px;
+
+    .el-image {
+      width: 43px;
+      height: 29px;
+    }
+  }
+}
 
 .left-menu.close {
   display: none;
 }
 
-.el-menu--collapse {
-  width: $left-collapse-width;
-  >.left-menu-item {
-    .menu-name {
-      display: none;
-    }
+.el-menu {
+  z-index: 1;
+
+  &:not(.el-menu--collapse) {
+    width: $left-width;
   }
 }
 
-.left-menu {
-  z-index: 1;
-  height: 100%;
-  box-sizing: border-box;
+.menu-box {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+  scrollbar-width: none;
+}
 
-  &:not(.el-menu--collapse):not(.close) {
-    width: $left-width;
-  }
+.menu-box::-webkit-scrollbar {
+  width: 0 !important;
+}
+
+.el-menu--collapse {
+  width: $left-collapse-width;
 }
 </style>

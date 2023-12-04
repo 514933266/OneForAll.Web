@@ -1,105 +1,89 @@
 <template>
-  <div>
-    <spinner v-if="loading"></spinner>
-    <div v-else>
-      <el-card class="search-card">
-        <div class="search-box">
-          <el-input v-model="searchOption.key" size="small" placeholder="搜索站内信"></el-input>
-          <el-button type="primary" class="search-btn" size="small" @click="search">
-            <font-awesome-icon fas icon="search"></font-awesome-icon>&nbsp;搜索
-          </el-button>
-        </div>
-      </el-card>
-      <el-tabs @tab-click="tabClick" type="border-card">
-        <el-tab-pane name="-1" label="全部消息">
-          <el-table border :data="list" @selection-change="selectionChange" :row-class-name="getRowClass" size="small"
-            class="table">
-            <div slot="empty" style="height:400px">
-              <nodata></nodata>
-            </div>
-            <el-table-column width="50">
-              <template slot-scope="scope">{{ scope.$index + 1 + (pageIndex - 1) * pageSize }}</template>
-            </el-table-column>
-            <el-table-column type="selection" width="55" align="center" header-align="center"></el-table-column>
-            <el-table-column show-overflow-tooltip prop="Title" label="标题内容">
-              <template slot-scope="scope">
-                <el-link>{{ scope.row.Title }}</el-link>
-              </template>
-            </el-table-column>
-            <el-table-column label="接收时间" width="150">
-              <template slot-scope="scope">{{ new Date(scope.row.CreateTime).toString('yyyy年MM月dd日 hh:mm') }}</template>
-            </el-table-column>
-            <el-table-column prop="Type" label="类型" width="200">
-              <template slot-scope="scope">{{ types[scope.row.Type] }}</template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane name="0">
-          <span slot="label">
-            未读消息&nbsp;<el-tag v-show="totalUnRead>0" type="danger" size="mini">{{totalUnRead}}</el-tag>
-          </span>
-          <el-table border :data="list" @selection-change="selectionChange" :row-class-name="getRowClass" size="small"
-            class="table">
-            <div slot="empty" style="height:400px">
-              <nodata></nodata>
-            </div>
-            <el-table-column width="50">
-              <template slot-scope="scope">{{ scope.$index + 1 + (pageIndex - 1) * pageSize }}</template>
-            </el-table-column>
-            <el-table-column type="selection" width="55" align="center" header-align="center"></el-table-column>
-            <el-table-column show-overflow-tooltip prop="Title" label="标题内容">
-              <template slot-scope="scope">
-                <el-link @click="toFormPage(scope.row)">{{ scope.row.Title }}</el-link>
-              </template>
-            </el-table-column>
-            <el-table-column label="接收时间" width="150">
-              <template slot-scope="scope">{{ new Date(scope.row.CreateTime).toString('yyyy年MM月dd日 hh:mm') }}</template>
-            </el-table-column>
-            <el-table-column prop="Type" label="类型" width="200">
-              <template slot-scope="scope">{{ types[scope.row.Type] }}</template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane name="1" label="已读消息">
-          <el-table border :data="list" @selection-change="selectionChange" :row-class-name="getRowClass" size="small"
-            class="table">
-            <div slot="empty" style="height:400px">
-              <nodata></nodata>
-            </div>
-            <el-table-column width="50">
-              <template slot-scope="scope">{{ scope.$index + 1 + (pageIndex - 1) * pageSize }}</template>
-            </el-table-column>
-            <el-table-column type="selection" width="55" align="center" header-align="center"></el-table-column>
-            <el-table-column show-overflow-tooltip prop="Title" label="标题内容">
-              <template slot-scope="scope">
-                <el-link>{{ scope.row.Title }}</el-link>
-              </template>
-            </el-table-column>
-            <el-table-column label="接收时间" width="150">
-              <template slot-scope="scope">{{ new Date(scope.row.CreateTime).toString('yyyy年MM月dd日 hh:mm') }}</template>
-            </el-table-column>
-            <el-table-column prop="Type" label="类型" width="200">
-              <template slot-scope="scope">{{ types[scope.row.Type] }}</template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
-      <el-card class="page-card">
-        <div class="card-body">
-          <div>
-            <el-button @click="del" class="ofa-button ofa-button-danger" size="small">删除</el-button>
-            <el-button @click="read" class="ofa-button" size="small">标记已读</el-button>
-            <el-button @click="readAll" class="ofa-button" size="small">全部已读</el-button>
-            <el-button @click="clear" class="ofa-button ofa-button-danger" size="small">全部删除</el-button>
-          </div>
-          <el-pagination background layout="total, sizes, prev, pager, next, jumper" :current-page="pageIndex"
-            :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="total" @size-change="pageSizeChange"
-            @current-change="pageIndexChange">
-          </el-pagination>
-        </div>
-      </el-card>
+  <el-container v-loading="loading" class="ofa-container column">
+    <div class="search-box">
+      <el-input v-model="searchOption.key" size="small" placeholder="搜索站内信"></el-input>
+      <el-button type="primary" class="search-btn" @click="search" size="small">
+        <font-awesome-icon fas icon="search"></font-awesome-icon>&nbsp;搜索
+      </el-button>
     </div>
-  </div>
+    <el-tabs @tab-click="tabClick" type="card">
+      <el-tab-pane name="-1" label="全部消息">
+        <el-table :data="list" @selection-change="selectionChange" :row-class-name="getRowClass" size="small"
+          class="ofa-table">
+          <el-table-column width="50">
+            <template slot-scope="scope">{{ scope.$index + 1 + (pageIndex - 1) * pageSize }}</template>
+          </el-table-column>
+          <el-table-column type="selection" width="55" align="center" header-align="center"></el-table-column>
+          <el-table-column show-overflow-tooltip prop="Title" label="标题内容">
+            <template slot-scope="scope">
+              <el-link>{{ scope.row.Title }}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column label="接收时间" width="160">
+            <template slot-scope="scope">{{ new Date(scope.row.CreateTime).toString('yyyy年MM月dd日 hh:mm') }}</template>
+          </el-table-column>
+          <el-table-column prop="Type" label="类型" width="200">
+            <template slot-scope="scope">{{ types[scope.row.Type] }}</template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane name="0">
+        <span slot="label">
+          未读消息&nbsp;<el-tag v-show="totalUnRead>0" type="danger" size="mini">{{totalUnRead}}</el-tag>
+        </span>
+        <el-table :data="list" @selection-change="selectionChange" :row-class-name="getRowClass" size="small"
+          class="ofa-table">
+          <el-table-column width="50">
+            <template slot-scope="scope">{{ scope.$index + 1 + (pageIndex - 1) * pageSize }}</template>
+          </el-table-column>
+          <el-table-column type="selection" width="55" align="center" header-align="center"></el-table-column>
+          <el-table-column show-overflow-tooltip prop="Title" label="标题内容">
+            <template slot-scope="scope">
+              <el-link @click="toFormPage(scope.row)">{{ scope.row.Title }}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column label="接收时间" width="160">
+            <template slot-scope="scope">{{ new Date(scope.row.CreateTime).toString('yyyy年MM月dd日 hh:mm') }}</template>
+          </el-table-column>
+          <el-table-column prop="Type" label="类型" width="200">
+            <template slot-scope="scope">{{ types[scope.row.Type] }}</template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane name="1" label="已读消息">
+        <el-table :data="list" @selection-change="selectionChange" :row-class-name="getRowClass" size="small"
+          class="ofa-table">
+          <el-table-column width="50">
+            <template slot-scope="scope">{{ scope.$index + 1 + (pageIndex - 1) * pageSize }}</template>
+          </el-table-column>
+          <el-table-column type="selection" width="55" align="center" header-align="center"></el-table-column>
+          <el-table-column show-overflow-tooltip prop="Title" label="标题内容">
+            <template slot-scope="scope">
+              <el-link>{{ scope.row.Title }}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column label="接收时间" width="160">
+            <template slot-scope="scope">{{ new Date(scope.row.CreateTime).toString('yyyy年MM月dd日 hh:mm') }}</template>
+          </el-table-column>
+          <el-table-column prop="Type" label="类型" width="200">
+            <template slot-scope="scope">{{ types[scope.row.Type] }}</template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
+    <div class="bottom">
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" :current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
+      </el-pagination>
+      <div>
+        <el-button @click="del" class="ofa-button ofa-button-danger" size="small">删除</el-button>
+        <el-button @click="read" class="ofa-button" size="small">标记已读</el-button>
+        <el-button @click="readAll" class="ofa-button" size="small">全部已读</el-button>
+        <el-button @click="clear" class="ofa-button ofa-button-danger" size="small">全部删除</el-button>
+      </div>
+    </div>
+  </el-container>
 </template>
 
 <script>
@@ -250,28 +234,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search-card {
-  margin-bottom: 10px;
-
   .search-box {
     display: flex;
-    width: 300px;
+    margin-bottom: 10px;
+
+    input { width: 200px ;}
 
     button {
       margin-left: 5px;
     }
   }
-}
 
-.page-card {
-  margin-top: 10px;
-  .card-body {
+  .bottom {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
   }
-}
 
-/deep/ .table {
+/deep/ .ofa-table {
   .el-link {
     font-size: 12px;
   }

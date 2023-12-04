@@ -1,49 +1,17 @@
 <template>
   <div class="browser">
     <div v-if="showBar" class="browser-toolbar">
-      <el-button-group class="btn-group">
-        <el-button @click="goHome">
-          <font-awesome-icon fas icon="home"></font-awesome-icon>
-        </el-button>
-        <el-button @click="refresh">
-          <font-awesome-icon fas icon="redo"></font-awesome-icon>
-        </el-button>
-        <el-button @click="scrollTabLeft">
-          <font-awesome-icon fas icon="angle-double-left"></font-awesome-icon>
-        </el-button>
-      </el-button-group>
       <div class="page-tabs">
         <div class="page-tabs-content">
           <div v-for="tab in tabs" :key="tab.num" :class="['tab', { active: tab.active }]" @click.stop="active(tab)">
-            <font-awesome-icon v-if="tab.icon" fas :icon="tab.icon">
-            </font-awesome-icon>
+            <font-awesome-icon v-if="tab.icon" fas :icon="tab.icon"></font-awesome-icon>
             <label>{{tab.label}}</label>
-            <font-awesome-icon class="fork-btn" v-if="!tab.isDefault" fas icon="times" @click.stop="closeTab(tab);">
-            </font-awesome-icon>
+            <font-awesome-icon class="fork-btn" v-if="!tab.isDefault" fas icon="times-circle" @click.stop="closeTab(tab)"></font-awesome-icon>
           </div>
         </div>
       </div>
-      <el-button-group class="btn-group">
-        <el-button @click="scrollTabRight">
-          <font-awesome-icon fas icon="angle-double-right"></font-awesome-icon>
-        </el-button>
-        <el-dropdown trigger="click">
-          <el-button type="primary">
-            标签&nbsp;<font-awesome-icon fas icon="angle-down"></font-awesome-icon>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="closeCurrentTab">关闭当前</el-dropdown-item>
-            <el-dropdown-item @click.native="closeAllTabs">全部关闭</el-dropdown-item>
-            <el-dropdown-item divided @click.native="closeOtherTabs">除此之外全部关闭</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-button @click="toggleFullScreen">
-          <font-awesome-icon fas icon="expand-arrows-alt"></font-awesome-icon>
-        </el-button>
-      </el-button-group>
     </div>
     <div class="page-box">
-      <spinner v-show="loading"></spinner>
       <transition v-show="!loading" name="fade">
         <keep-alive v-if="routerAlive">
           <router-view></router-view>
@@ -54,6 +22,8 @@
 </template>
 
 <script>
+import { SET_ACTIVE_MENU_INDEX, SET_BREADCRUMB } from '../store/mutation-types'
+// 浏览器
 export default {
   name: 'Browser',
   props: {
@@ -76,12 +46,14 @@ export default {
       const exists = this.get(tab)
       if (!exists && tab.isBlank) {
         this.add(tab)
-      } else {
-        this.update(tab)
-      }
-      this.$nextTick(() => {
         this.active(tab)
-      })
+      } else if (!exists) {
+        this.redirect(tab)
+        this.active(tab)
+      } else if (exists) {
+        this.update(tab)
+        this.active(tab)
+      }
     },
     locationTo (url, callback) {
       // 页面跳转
@@ -107,28 +79,23 @@ export default {
       this.tabs.push(tab)
     },
     update (tab) {
-      let index = this.tabs.findIndex(w => w.name === tab.name)
-      if (index < 0) {
-        index = this.tabs.findIndex(w => w.active)
-      }
-      if (index > -1) {
-        const oldTab = this.tabs[index]
-        const newTab = { ...tab, label: tab.label && tab.label.length > 0 ? tab.label : oldTab.label }
-        this.$set(this.tabs, index, newTab)
-      } else {
-        this.add(tab)
-      }
+      const index = this.tabs.findIndex(w => w.id === tab.id)
+      const oldTab = tab
+      const newTab = { ...tab, label: tab.label && tab.label.length > 0 ? tab.label : oldTab.label }
+      this.$set(this.tabs, index, newTab)
     },
     active (tab) {
-      this.inactive()
       const obj = this.get(tab)
       if (obj) {
+        this.inactive()
         obj.active = true
         this.redirect(obj)
+        this.$store.commit(SET_BREADCRUMB, obj.id) // 通知激活面包屑
+        this.$store.commit(SET_ACTIVE_MENU_INDEX, obj.id) // 通知激活对应菜单
       }
     },
     inactive () {
-      const tab = this.tabs.find(w => w.active)
+      const tab = this.tabs.find(w => w.active === true)
       if (tab) tab.active = false
     },
     refresh () {
@@ -277,14 +244,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$toolbar-height:50px;
-$rem: .75rem;
+$toolbar-height: 44px;
 
 .browser {
   flex: 1;
   display: flex;
   flex-direction: column;
-  font-size: $rem;
+  font-size: 1rem;
 
   /deep/ .browser-toolbar {
     height: $toolbar-height;
@@ -315,23 +281,31 @@ $rem: .75rem;
         justify-content: flex-start;
         align-items: flex-end;
         height: 100%;
-        width: 9999px;
-
+        width: 100%;
+        padding-left: 20px;
+        box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.05);
         .tab {
-          padding: 0 1rem;
+          min-width: 106px;
+          padding: 0 10px;
           display: flex;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
-          height: 100%;
           cursor: pointer;
+          font-size: 1rem;
 
           label {
             cursor: pointer;
             padding: 0 10px 0 5px;
           }
 
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+
           .fork-btn {
-            padding-left: 0.25rem;
+            width: 12px;
+            height: 12px;
           }
         }
       }
@@ -343,18 +317,22 @@ $rem: .75rem;
   }
 
   .page-box {
-    flex: 1;
-    padding: 20px;
+    box-sizing: border-box;
+    padding: 26px 30px;
+    background: #f7f8fc;
+    height: calc(100vh - 122px);
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
 
 .fade-enter-active,
 .fade-leave-avtive {
-  transition: opacity 1s
+  transition: opacity 1s;
 }
 
 .fade-enter,
 .fade-leave-to {
-  opacity: 0
+  opacity: 0;
 }
 </style>

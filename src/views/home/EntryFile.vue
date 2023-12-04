@@ -1,5 +1,5 @@
 <template>
-  <el-container class="container">
+  <el-container class="ofa-container column">
     <el-header class="header">
       {{entity.Name}} - 入职信息登记
     </el-header>
@@ -49,7 +49,7 @@
             <!-- 追加的分组的字段 -->
             <div v-if="fieldSetting.IsGrouped">
               <div v-for="(group, gIndex) in fieldSetting.Groups" :key="group.id" class="field-box">
-                <el-divider></el-divider>
+                <el-divider v-if="gIndex > 0"></el-divider>
                 <el-form-item v-for="field in group.Fields" :key="field.Id"
                   :rules="[{ required: field.IsRequired, message: `请输入${field.Text}`, trigger: 'blur' }]">
                   <template slot="label">
@@ -103,35 +103,19 @@
 
 <script>
 import API from '../../apis/oa-api'
+import SYS_API from '../../apis/sys-api'
 import { ENTRY_FILE, ENTRY_FILE_RESULT } from '../../router/base-router'
+import { SET_CLIENT } from '../../store/mutation-types'
+import { PERSON_FIELD_TYPE, PERSON_EMPLOYEE_TYPE, PERSON_EMPLOYEE_STATUS } from '../../assets/js/oa-const'
 
 // 员工入职登记填写
 export default {
   name: ENTRY_FILE.name,
   data () {
     return {
-      fieldTypeList: [
-        { value: 0, label: '文本' },
-        // { value: 1, label: '文本域（可输入多行文本）' },
-        // { value: 2, label: '富文本（拥有更多丰富的文本内容，如图片、网页）' },
-        { value: 3, label: '日期' },
-        // { value: 4, label: '日期（含时间）' },
-        { value: 5, label: '下拉选项' },
-        { value: 6, label: 'Radio选项' },
-        { value: 7, label: '附件' },
-        { value: 8, label: 'Check选项' }
-      ], // 字段类型
-      employeeTypes: [
-        { value: '全职', label: '全职' },
-        { value: '实习生', label: '实习生' },
-        { value: '兼职', label: '兼职' },
-        { value: '劳务派遣', label: '劳务派遣' },
-        { value: '退休返聘', label: '退休返聘' }
-      ], // 员工类型
-      employeeStatus: [
-        { value: '正式员工', label: '正式员工' },
-        { value: '试用员工', label: '试用员工' }
-      ], // 员工状态
+      fieldTypeList: PERSON_FIELD_TYPE, // 字段类型
+      employeeTypes: PERSON_EMPLOYEE_TYPE, // 员工类型
+      employeeStatus: PERSON_EMPLOYEE_STATUS, // 员工状态
       loading: false, // 加载中
       entity: { ExtendInformations: [] }, // 实体
       fieldSettings: [] // 字段设置
@@ -146,44 +130,49 @@ export default {
     init () {
       if (!this.loading) {
         this.loading = true
-        this.get()
+        // 由于架构配置，需要先拿到client的host列表
+        if (this.$store.getters.client && this.$store.getters.client.OAuthClientId) {
+          this.get()
+        } else {
+          this.getClient()
+        }
       }
+    },
+    getClient () {
+      this.axios.get(SYS_API.WEBSITE_SETTING_RESOURCE.URL)
+        .then(response => {
+          this.$store.commit(SET_CLIENT, response)
+          this.get()
+        })
     },
     get () {
       const id = this.$route.query.Id ? this.$route.query.Id : this.$route.query.id
       const url = this.$root.getApi(API.KEY, API.PERSONAL_ENTRY.URL) + '/' + id
       this.axios.get(url).then(response => {
         this.entity = { ExtendInformations: [], ...response }
-        this.getFieldSettings()
+        this.getFieldSettings(id)
       })
     },
-    getFieldSettings () {
-      const url = this.$root.getApi(API.KEY, API.PERSONAL_ENTRY.SETTING).replace(/{id}/, this.entity.Id)
+    getFieldSettings (id) {
+      const url = this.$root.getApi(API.KEY, API.PERSONAL_ENTRY.SETTING).replace(/{id}/, id)
       this.axios.get(url).then(response => {
         response.forEach(e => {
           if (e.IsGrouped) {
             // 分组字段，需要重新组装
-            const firstField = e.Fields[0]
-            const groupCount = this.entity.ExtendInformations.filter(w => w.Name.includes(firstField.Name)).length
-            for (let index = 1; index < groupCount; index++) {
-              const copyFields = JSON.parse(JSON.stringify(e.Fields))
-              copyFields.forEach(e => { e.Name = e.Name + index })
-              if (index === 1) {
-                this.$set(e, 'Groups', [{ Fields: copyFields }])
-              } else {
-                e.Groups.push({ Fields: copyFields })
+            const groups = []
+            e.Fields.forEach(field => {
+              const reg = new RegExp(`^${field.Name}[0-9]`, 'g')
+              const fields = this.entity.ExtendInformations.filter(w => reg.test(w.Name))
+              for (var i = 0; i < fields.length; i++) {
+                const newField = Object.assign({}, field, fields[i])
+                if (groups[i]) {
+                  groups[i].Fields.push(newField)
+                } else {
+                  groups.push({ Fields: [newField] })
+                }
               }
-            }
-            if (e.Groups) {
-              e.Groups.forEach(group => {
-                group.Fields.forEach(field => {
-                  const item = this.entity.ExtendInformations.find(w => w.Name === field.Name)
-                  if (item != null) {
-                    this.$set(field, 'Value', item.Value)
-                  }
-                })
-              })
-            }
+            })
+            this.$set(e, 'Groups', groups)
           }
           // 赋值
           e.Fields.forEach(field => {
@@ -265,13 +254,35 @@ export default {
     uploadFile (upload) {
       const formData = new FormData()
       formData.append('files', upload.file, upload.file.name)
-      const url = this.$root.getApi(API.KEY, API.PERSONAL_ENTRY.UPLOAD_FILE.replace(/{id}/, this.entity.Id))
+      const url = this.$root.getApi(API.KEY, API.PERSONAL_ENTRY.UPLOAD_FILE(this.entity.Id))
       this.axios.post(url, formData)
         .then(response => {
           if (response.Status) {
             this.$set(upload.data, 'Value', `${response.Data.Result.Url}`)
           }
         })
+    },
+    addSettingGroup (setting) {
+      const newItems = []
+      const seed = setting.Groups ? setting.Groups.length + 1 : 1
+      if (seed > 8) {
+        this.$message.error('每个分组最多只能存在9条数据!')
+        return
+      }
+      for (var i = 0; i < setting.Fields.length; i++) {
+        const field = setting.Fields[i]
+        const newField = Object.assign({}, field)
+        newField.Name = newField.Name + seed
+        newItems.push(newField)
+      }
+      if (setting.Groups) {
+        setting.Groups.push({ Fields: newItems })
+      } else {
+        this.$set(setting, 'Groups', [{ Fields: newItems }])
+      }
+    },
+    removeSettingGroup (setting, gIndex) {
+      setting.Groups.splice(gIndex, 1)
     },
     toResultPage () {
       this.$router.push(ENTRY_FILE_RESULT)
@@ -284,7 +295,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.ofa-container {
   background: #fff;
   height: 100%;
   width: 100%;
@@ -294,7 +305,8 @@ export default {
     justify-content: center;
     align-items: center;
     background: #fff;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: 600;
 
     .el-row {
       flex: 1;

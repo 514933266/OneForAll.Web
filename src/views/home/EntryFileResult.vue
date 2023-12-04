@@ -1,5 +1,5 @@
 <template>
-  <el-container class="container">
+  <el-container class="ofa-container column">
     <el-main class="content">
       <div class="icon ofa-bg-success">
         <i class="el-icon-check"></i>
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.ofa-container {
   background: #fff;
   height: 100%;
   width: 100%;

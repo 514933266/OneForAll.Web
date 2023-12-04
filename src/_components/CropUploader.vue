@@ -60,7 +60,7 @@
 import { VueCropper } from 'vue-cropper'
 export default {
   props: {
-    value: {
+    imgUrl: {
       type: String,
       default: ''
     },
@@ -85,7 +85,6 @@ export default {
       errMsg: '', //                    错误提示
       previews: {}, //                  实时预览
       sliderNum: 0, //                  滑块的数值
-      imgUrl: '', //                   图片上传后的地址
       dialogVisible: false,
       option: {
         circle: false, //               圆形裁剪（需要配合）fixedNumber设置比例为1：1
@@ -104,14 +103,6 @@ export default {
         centerBox: true, //             截图框是否被限制在图片里面
         infoTrue: true // true          为展示真实输出图片宽高 false 展示看到的截图框宽高
       }
-    }
-  },
-  watch: {
-    value (newValue) {
-      this.imgUrl = newValue
-    },
-    imgUrl (newValue) {
-      this.$emit('input', newValue)
     }
   },
   methods: {
@@ -181,7 +172,6 @@ export default {
     }
   },
   created () {
-    this.imgUrl = this.value
     this.init()
   },
   components: { VueCropper }

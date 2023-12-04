@@ -1,20 +1,11 @@
 <template>
-  <div>
-    <spinner v-if="loading"></spinner>
-    <div v-else>
-      <el-card>
-        <el-page-header @back="goBack" content="消息详情">
-        </el-page-header>
-      </el-card>
-      <el-card class="msg-card">
-        <div class="title-box">
-          <div class="title">{{entity.Title}}</div>
-          <div class="date">{{new Date(entity.CreateTime).toString('yyyy年MM月dd日 hh:mm')}}</div>
-        </div>
-        <el-divider></el-divider>
-        <div v-html="entity.Content"></div>
-      </el-card>
+  <div class="ofa-container column">
+    <div class="title-box">
+      <div class="title">{{entity.Title}}</div>
+      <div class="date">{{new Date(entity.CreateTime).toString('yyyy年MM月dd日 hh:mm')}}</div>
     </div>
+    <el-divider></el-divider>
+    <div v-html="entity.Content"></div>
   </div>
 </template>
 
@@ -59,22 +50,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.msg-card {
-    min-height: 600px;
-    margin-top: 20px;
-}
 .title-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .title {
-        font-size: 1.25rem;
-    }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-    .date {
-        margin-top: 10px;
-        font-size: 1rem;
-    }
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #606266;
+  }
+
+  .date {
+    margin-top: 10px;
+    font-size: .85rem;
+    color: #99a9bf;
+  }
 }
 </style>

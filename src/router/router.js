@@ -47,26 +47,25 @@ const router = new Router({
   base: '/',
   routes: [{
     ...LOGIN,
-    component: () => import('../views/login/App.vue')
+    component: () => import('../views/home/Login.vue')
   },
   {
     ...INDEX,
-    component: () => import('../views/index/App.vue'),
+    component: () => import('../views/home/Index.vue'),
     children: [...childRoutes]
   },
   {
     ...ENTRY_FILE,
-    component: () => import('../views/entryFile/App.vue')
+    component: () => import('../views/home/EntryFile.vue')
   },
   {
     ...ENTRY_FILE_RESULT,
-    component: () => import('../views/entryFile/Result.vue')
+    component: () => import('../views/home/EntryFileResult.vue')
   },
   {
     path: '*',
-    component: () => import('../views/index/App.vue')
-  }
-  ]
+    component: () => import('../views/home/Login.vue')
+  }]
 })
 
 router.beforeEach((to, from, next) => {

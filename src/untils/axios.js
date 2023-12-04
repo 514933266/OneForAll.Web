@@ -6,7 +6,7 @@ import store from '../store/store'
 import baseErrType from './error'
 import auth from './oauth'
 import { SET_AXIOS_URL } from '../store/mutation-types'
-import { _403, _404, _405, _500, LOGIN } from '../router/base-router'
+import { _403, _404, _405, _415, _500, LOGIN, ENTRY_FILE } from '../router/base-router'
 import { Notification } from 'element-ui'
 import qs from 'qs'
 
@@ -62,12 +62,14 @@ axios
         showMessage(error.message.response)
       }
     }
-    if (router.currentRoute.name !== LOGIN.name) {
+
+    if (router.currentRoute.name !== LOGIN.name && router.currentRoute.name !== ENTRY_FILE.name) {
       switch (err) {
         case 401: auth.refreshToken(() => axios(err.config), authFailed); break
         case 403: if (router.currentRoute.name !== _403.name) router.push(_403); break
         case 404: if (router.currentRoute.name !== _404.name) router.push(_404); break
         case 405: if (router.currentRoute.name !== _405.name) router.push(_405); break
+        case 415: if (router.currentRoute.name !== _415.name) router.push(_415); break
         case 500: if (router.currentRoute.name !== _500.name) router.push(_500); break
         default: router.push(LOGIN); break
       }

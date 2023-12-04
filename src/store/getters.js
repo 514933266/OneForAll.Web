@@ -30,6 +30,20 @@ const getters = {
   },
   token_refreshing: state => {
     return state.token_refreshing
+  },
+  breadcrumbs: state => {
+    const item = state.breadcrumbHistorys[0]
+    if (item) return item.value
+    return []
+  },
+  searchMenuHistorys: state => {
+    if (state.menuHistorys) {
+      return state.menuHistorys
+    } else {
+      const cookie = VueCookies.get('menuHistorys')
+      if (cookie && cookie !== 'null') return cookie
+    }
+    return []
   }
 }
 

@@ -54,13 +54,17 @@ export default {
     border-radius: 20px;
 
     &:hover {
-      border-color: #409EFF;
+      border-color: #409eff;
     }
   }
 
   /deep/ .el-input__suffix {
     display: flex;
     align-items: center;
+    right: 10px;
+  }
+  /deep/ .el-input__prefix {
+    left: 10px;
   }
 }
 
@@ -69,8 +73,8 @@ export default {
     cursor: pointer;
 
     &:hover {
-      color: #409EFF;
-      transition: all .3s ease;
+      color: #409eff;
+      transition: all 0.3s ease;
     }
   }
 }

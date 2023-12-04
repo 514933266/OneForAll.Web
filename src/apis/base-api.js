@@ -1,5 +1,5 @@
+// 基础管理
 var API = {
-  // 域名代码
   KEY: 'OneForAll.Base',
   PERSONAL: {
     URL: '/api/SysPersonal',
