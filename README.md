@@ -8,9 +8,17 @@
 | ------- | ------- | ------- |
 | 授权服务 | 基于OAuth2的授权服务 | https://github.com/514933266/OneForAll.Api.OAuth |
 | 开发人员功能 | 开发人员相关功能（租户、菜单、权限、站点授权） | https://github.com/514933266/OneForAll.Api.Sys |
+| 开发人员功能 | 开发人员相关功能界面 | https://github.com/514933266/OneForAll.Web.Sys |
 | 系统管理 | 租户的权限、角色管理功能 | https://github.com/514933266/OneForAll.Api.Base |
-| 日志服务 | 简单的日志服务 | https://github.com/514933266/OneForAll.Api.SysLog |
-| 消息服务 | 包含系统消息、邮件、钉钉推送、微信推送、短信等 | https://github.com/514933266/OneForAll.Api.Ums |
+| 系统管理 | 系统管理界面 | https://github.com/514933266/OneForAll.Web.Base |
+| 日志中心 | 各类日志服务 | https://github.com/514933266/OneForAll.Api.SysLog |
+| 日志中心 | 日志中心界面 | https://github.com/514933266/OneForAll.Web.SysLog |
+| 消息中心 | 包含系统消息、邮件、钉钉推送、微信推送、短信等 | https://github.com/514933266/OneForAll.Api.Ums |
+| 消息中心 | 消息中心界面 | https://github.com/514933266/OneForAll.Web.Ums |
+| 任务中心 | 基于Quartz实现的定时任务管理服务 | https://github.com/514933266/OneForAll.Api.ScheduleJob |
+| 任务中心 | 任务中心界面 | https://github.com/514933266/OneForAll.Web.ScheduleJob |
+| 商户中心 | 基于Quartz实现的定时任务管理服务 | https://github.com/514933266/OneForAll.Api.ScheduleJob |
+| 商户中心 | 商户中心界面 | https://github.com/514933266/OneForAll.Web.ScheduleJob |
 
 ### 演示地址
 https://yanshi.fengwoyun.net<br/>
@@ -53,4 +61,11 @@ export default {
 }
 ```
 
-### 问题
+### 自动注册路由
+1. 只需要将页面文件和目录创建在views目录下即可自动创建
+2. 如果文件名称是驼峰式，则会将路由注册为router-name格式
+3. 你可以根据自己的喜好修改规则，在router.js文件中
+
+### 单体项目
+1. 你也可以把其他页面服务集成到当前项目中，只需要把页面和相关样式、js按照规范存放即可
+2. 还需要在后台菜单管理，将对应的菜单类型由远程组件改为节点
