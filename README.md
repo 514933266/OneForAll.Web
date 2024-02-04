@@ -16,8 +16,10 @@
 | 消息中心 | 消息中心界面 | https://github.com/514933266/OneForAll.Web.Ums |
 | 任务中心 | 基于Quartz实现的定时任务管理服务 | https://github.com/514933266/OneForAll.Api.ScheduleJob |
 | 任务中心 | 任务中心界面 | https://github.com/514933266/OneForAll.Web.ScheduleJob |
-| 商户中心 | 基于Quartz实现的定时任务管理服务 | https://github.com/514933266/OneForAll.Api.ScheduleJob |
-| 商户中心 | 商户中心界面 | https://github.com/514933266/OneForAll.Web.ScheduleJob |
+| 商户中心 | 基于Quartz实现的定时任务管理服务 | https://github.com/514933266/OneForAll.Api.Oms |
+| 商户中心 | 商户中心界面 | https://github.com/514933266/OneForAll.Web.Oms |
+| 智能人事 | 常用OA系统功能 | https://github.com/514933266/OneForAll.Api.OA |
+| 智能人事 | 智能人事界面 | https://github.com/514933266/OneForAll.Web.OA |
 
 ### 演示地址
 https://yanshi.fengwoyun.net<br/>
