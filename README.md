@@ -68,14 +68,14 @@ export default {
 3. 你可以根据自己的喜好修改规则，在router.js文件中
 
 ### 主要目录说明
---src
-|--- _components（全局公共组件）
-|--- apis（子模块api文件）
-|--- assets（资源文件）
-|--- router（子模块路由文件）
-|--- store（vuex相关文件）
-|--- untils（工具封装js文件）
-|--- views（页面文件）
+--src<br/>
+|--- _components（全局公共组件）<br/>
+|--- apis（子模块api文件）<br/>
+|--- assets（资源文件）<br/>
+|--- router（子模块路由文件）<br/>
+|--- store（vuex相关文件）<br/>
+|--- untils（工具封装js文件）<br/>
+|--- views（页面文件）<br/>
 
 ### 单体项目
 1. 你也可以把其他页面服务集成到当前项目中，只需要把页面和相关样式、js按照目录规范存放即可
