@@ -22,7 +22,7 @@ import moment from 'moment'
 
 // UI框架 ElementUI
 import ElementUI from 'element-ui'
-import '../src/assets/css/default-theme.scss'
+import '../src/assets/css/default.scss'
 
 // 字体库 Fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'

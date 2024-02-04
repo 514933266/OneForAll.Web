@@ -1,0 +1,103 @@
+// 颜色
+@import "./color.scss";
+
+// 文本颜色
+.ofa-label {
+    color: $label-color;
+}
+
+.ofa-text {
+    &-primary {
+        color: $primary-color !important;
+    }
+
+    &-danger {
+        color: $danger-color !important;
+    }
+
+    &-success {
+        color: $success-color !important;
+    }
+
+    &-warning {
+        color: $warning-color !important;
+    }
+
+    &-secondary {
+        color: $secondary-color !important;
+    }
+
+    &-placeholder {
+        color: $placeholder-color !important;
+    }
+
+    &-disabled {
+        color: $disabled-color !important;
+    }
+
+    &-info {
+        color: $info-color !important;
+    }
+
+    &-title {
+        color: $title-color !important;
+        &.ofa-s {
+            font-size: .75rem;
+        }
+        &.ofa-m {
+            font-size: 1rem;
+        }
+        &.ofa-l {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+        &.ofa-xl {
+            font-weight: 600;
+            font-size: 1.75rem;
+        }
+        &.ofa-xxl {
+            font-weight: 600;
+            font-size: 2rem;
+        }
+    }
+
+    &-label {
+        color: $label-color !important;
+    }
+}
+
+.ofa-text-primary.hover,
+.ofa-text-danger.hover,
+.ofa-text-success.hover,
+.ofa-text-warning.hover,
+.ofa-text-secondary.hover,
+.ofa-text-placeholder.hover,
+.ofa-text-disabled.hover,
+.ofa-text-info.hover,
+.ofa-text-title.hover,
+.ofa-text-remark.hover,
+.ofa-text-watermark.hover {
+    &:hover {
+        opacity: 0.8 !important;
+        transition: color 0.3s ease;
+    }
+}
+
+// 背景
+.ofa-bg {
+    &-primary {
+        background: $primary-color !important;
+    }
+
+    &-danger {
+        background: $danger-color !important;
+    }
+
+    &-success {
+        background: $success-color !important;
+    }
+
+    &-warning {
+        background: $warning-color !important;
+    }
+}

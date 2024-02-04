@@ -1,33 +1,17 @@
 // 默认皮肤
 @import "./theme/index.css";
+// 颜色
+@import "./color.scss";
+// 字体
+@import "./font.scss";
+// 布局
+@import "./layout.scss";
 // 左侧菜单
 @import "./left-menu.scss";
 // 浏览器
 @import "./browser.scss";
 
-// 主色
-$primary-color: #409eff;
-$danger-color: #ff4351;
-$invalid-color: #f56c6c;
-$success-color: #67C23A;
-$warning-color: #feae1b;
-// 字体色
-$regular-color: #606266;
-$secondary-color: #909399;
-$placeholder-color: #a8abb2;
-$disabled-color: #c0c4cc;
-$info-color: #606266;
-$grey-color: #a7abba;
-$watermark-color: #f2f6fc;
-$border-color: #ebeef5;
-$remark-color: #99a9bf;
-$label-color: #99a9bf;
-$title-color: #2e3543;
-// 边框色
-$border-color: #dcdfe6;
-$border-light-color: #e4e7ed;
-$border-lighter-color: #ebeef5;
-$border-exlight-color: #f2f6fc;
+
 
 // 基础
 html,
@@ -57,152 +41,6 @@ li {
   width: 100%;
   height: 100%;
   overflow: auto;
-}
-
-// 布局
-.ofa-container {
-  display: flex;
-  overflow-x: hidden;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-}
-
-.ofa-container.column {
-  flex-direction: column;
-}
-
-// 文本颜色
-.ofa-label {
-  color: $label-color;
-}
-
-.ofa-text-primary {
-  color: $primary-color !important;
-}
-
-.ofa-text-danger {
-  color: $danger-color !important;
-}
-
-.ofa-text-success {
-  color: $success-color !important;
-}
-
-.ofa-text-warning {
-  color: $warning-color !important;
-}
-
-.ofa-text-regular {
-  color: $regular-color !important;
-}
-
-.ofa-text-secondary {
-  color: $secondary-color !important;
-}
-
-.ofa-text-placeholder {
-  color: $placeholder-color !important;
-}
-
-.ofa-text-disabled {
-  color: $disabled-color !important;
-}
-
-.ofa-text-info {
-  color: $info-color !important;
-}
-
-.ofa-text-grey {
-  color: $grey-color !important;
-}
-
-.ofa-text-title {
-  color: $title-color !important;
-}
-
-.ofa-text-remark {
-  color: $remark-color !important;
-}
-
-.ofa-text-watermark {
-  color: $watermark-color !important;
-}
-
-.ofa-text-label {
-  color: $label-color !important;
-}
-
-.ofa-text-primary.hover,
-.ofa-text-danger.hover,
-.ofa-text-success.hover,
-.ofa-text-warning.hover,
-.ofa-text-regular.hover,
-.ofa-text-secondary.hover,
-.ofa-text-placeholder.hover,
-.ofa-text-disabled.hover,
-.ofa-text-info.hover,
-.ofa-text-grey.hover,
-.ofa-text-title.hover,
-.ofa-text-remark.hover,
-.ofa-text-watermark.hover{
-  &:hover {
-    opacity: 0.8 !important;
-    transition: color 0.3s ease;
-  }
-}
-
-// 背景
-.ofa-bg-primary {
-  background: $primary-color !important;
-}
-
-.ofa-bg-danger {
-  background: $danger-color !important;
-}
-
-.ofa-bg-success {
-  background: $success-color !important;
-}
-
-.ofa-bg-warning {
-  background: $warning-color !important;
-}
-
-.ofa-bg-regular {
-  background: $regular-color !important;
-}
-
-.ofa-bg-secondary {
-  background: $secondary-color !important;
-}
-
-.ofa-bg-placeholder {
-  background: $placeholder-color !important;
-}
-
-.ofa-bg-disabled {
-  background: $disabled-color !important;
-}
-
-.ofa-bg-info {
-  background: $info-color !important;
-}
-
-.ofa-bg-grey {
-  background: $grey-color !important;
-}
-
-.ofa-bg-title {
-  background: $title-color !important;
-}
-
-.ofa-bg-remark {
-  background: $remark-color !important;
-}
-
-.ofa-bg-watermark {
-  background: $watermark-color !important;
 }
 
 // 按钮
@@ -378,7 +216,7 @@ li {
     .title {
       font-size: 1.5rem;
       font-weight: bolder;
-      color: $regular-color;
+      color: $title-color;
     }
 
     .title-tips {
@@ -455,7 +293,7 @@ li {
       padding: 0.75rem 0;
       background-color: transparent !important;
       border: none;
-      color: $regular-color;
+      color: $secondary-color;
     }
   }
 
@@ -567,7 +405,7 @@ li {
 
 #nprogress .bar,
 .spinner div {
-  background: #409eff !important;
+  background: $primary-color !important;
 }
 
 a,
@@ -619,18 +457,18 @@ body {
     margin-top: 13px;
     font-size: 14px;
     font-weight: 500;
-    color: #2e3543;
+    color: $secondary-color;
     margin-bottom: 6px;
   }
 
   .error-desc {
     font-size: 12px;
     font-weight: 500;
-    color: #a7abba;
+    color: $info-color;
   }
 
   .error-code {
-    color: #ff3c3c;
+    color: $danger-color;
     margin-right: 6px;
   }
 }

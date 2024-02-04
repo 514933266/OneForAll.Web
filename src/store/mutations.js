@@ -15,8 +15,8 @@ const mutations = {
   },
   [CLEAR_TOKEN] (state) {
     state.auth = { refreshing: false }
-    VueCookies.set('refresh_token', null)
-    VueCookies.set('access_token', null)
+    VueCookies.remove('refresh_token')
+    VueCookies.remove('access_token')
   },
   [SET_OAUTH_REFRESHING] (state, e) {
     state.token_refreshing = e
@@ -28,9 +28,9 @@ const mutations = {
     state.user = {}
     state.tenant = {}
     state.client = {}
-    VueCookies.set('refresh_token', null)
-    VueCookies.set('access_token', null)
-    VueCookies.set('client', null)
+    VueCookies.remove('refresh_token')
+    VueCookies.remove('access_token')
+    VueCookies.remove('client')
   },
   [SET_TENANT] (state, e) {
     state.tenant = e

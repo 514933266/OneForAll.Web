@@ -16,7 +16,7 @@
       </div>
       <div class="message-list-item" v-for="item in list" :key="item.id">
         <div class="message-list-top">
-          <div class="message-list-top-left">
+          <div class="message-list-top-left ofa-text-title">
             <span>{{ item.Title }}</span>
           </div>
           <div class="message-list-top-right">
@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="message-list-desc">{{ item.Content }}</div>
-        <div class="message-list-pol">发件人：{{ item.CreatorName }}</div>
+        <div class="message-list-pol">发件人：{{ types[item.Type] }}</div>
         <div class="message-list-line"></div>
       </div>
     </div>
@@ -34,12 +34,14 @@
 <script>
 import { MESSAGE_CENTER } from '../../../router/base-router'
 import API from '../../../apis/base-api'
+import { MESSAGE_TYPE } from '../../../assets/js/const'
 
 // 站内信
 export default {
   name: 'PersonalMessage',
   data () {
     return {
+      types: MESSAGE_TYPE,
       list: []
     }
   },
@@ -52,7 +54,7 @@ export default {
         })
     },
     toMessageCenterPage () {
-      this.$refs.browser.navigate(MESSAGE_CENTER)
+      this.$root.navigate(MESSAGE_CENTER)
     }
   },
   created () {

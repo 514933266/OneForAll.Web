@@ -102,7 +102,6 @@
 <script>
 import API from '../../apis/base-api'
 import OA_API from '../../apis/oa-api'
-import auth from '../../untils/oauth'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Browser from '../../_components/Browser'
@@ -118,13 +117,11 @@ export default {
   data () {
     return {
       loading: false, // 加载中
-      logining: false, // 重新登录中
       menus: [], // 菜单列表
       activeName: 'first',
       searchMenuName: '', // 搜索的菜单名称
       messageList: [], // 消息列表
       moudleLoadNum: 0, // 模块加载完成数量
-      refreshTokenInterval: {}, // token刷新间隔
       scheduleDate: new Date(), // 日程日期
       calendarDatas: [], // 日程
       tabtext: '（今天）'
@@ -154,20 +151,23 @@ export default {
   },
   methods: {
     init () {
-      if (!this.$store.getters.access_token ||
-        this.$store.getters.access_token.length < 1 ||
-        this.domain === '') {
-        this.$router.push(LOGIN)
-        return
-      }
       if (!this.loading) {
         this.loading = true
-        NProgress.start()
-        this.refreshToken()
-        this.getMenus()
-        this.getUserMessage()
-        this.getPersonalSchedules()
+        if (this.checkAuth()) {
+          NProgress.start()
+          this.getMenus()
+          this.getUserMessage()
+          this.getPersonalSchedules()
+        }
       }
+    },
+    checkAuth () {
+      if (!this.$store.getters.access_token || !this.domain) {
+        this.loading = false
+        this.$router.push(LOGIN)
+        return false
+      }
+      return true
     },
     getMenus () {
       const url = this.$root.getApi(API.KEY, API.PERSONAL.MENU)
@@ -187,40 +187,21 @@ export default {
         })
     },
     loadMoudles () {
-      const ms = this.findMoudles()
-      if (ms.length > 0) {
-        ms.forEach(e => { this.loadMoudle(e) })
-      } else {
-        this.loadingDone()
-      }
-    },
-    findMoudles () {
-      const arr = []
       this.menus.forEach(e => {
-        if (this.checkMode(e)) {
-          arr.push(e)
+        if (e.Type === 1) {
+          this.loadMoudle(e)
         }
       })
-      return arr
     },
     loadMoudle (menu) {
       const index = this.modules.findIndex(w => w.Id === menu.Id)
       if (index < 0) {
-        const url = menu.Url.replace('component:', '')
-        this.axios.get(url).then((html) => {
-          const page = this.parsingHtml(url, html)
-          const m = {
-            loading: true,
-            ...menu,
-            ...page
-          }
+        this.axios.get(menu.Url).then((html) => {
+          const page = this.parsingHtml(menu.Url, html)
+          const m = { loading: true, ...menu, ...page }
           this.$store.commit(ADD_MODULE, m)
         })
       }
-    },
-    checkMode (menu) {
-      const m1 = /^component:(http|https):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/gi
-      return m1.test(menu.Url) || menu.Type === 1
     },
     parsingHtml (url, html) {
       // 解析内容页中的css/js引用，并插入父页面文档底部
@@ -254,28 +235,17 @@ export default {
       return page
     },
     loadMoudleDone (nprogressTryCount) {
-      if (this.modules.findIndex(w => w.loading) > -1 && nprogressTryCount < 6) {
+      if (this.modules.findIndex(w => w.loading) > -1 && nprogressTryCount < 3) {
         setTimeout(() => {
           // 每5秒检查一次模块是否全部加载完成
           nprogressTryCount++
           this.loadMoudleDone(nprogressTryCount)
-        }, 3000)
+        }, 5000)
       } else {
-        this.loadingDone()
-      }
-    },
-    refreshToken () {
-      clearInterval(this.refreshTokenInterval)
-      this.refreshTokenInterval = setInterval(() => {
-        auth.refreshToken()
-      }, 1000 * 60 * 2)
-    },
-    loadingDone () {
-      NProgress.done()
-      this.loading = false
-      this.$nextTick(() => {
+        NProgress.done()
+        this.loading = false
         this.$refs.leftMenu.clickNode(WELCOME.id)
-      })
+      }
     },
     getPersonalSchedules () {
       const url = this.$root.getApi(OA_API.KEY, OA_API.PERSONAL_SCHEDULE.DATE(this.scheduleDate))

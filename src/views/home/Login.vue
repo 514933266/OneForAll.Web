@@ -8,12 +8,12 @@
         <div class="logo">
           <el-image :src="require('../../assets/img/logo-font.svg')" />
         </div>
-        <div class="title ofa-text-title">
+        <div class="title ofa-text-title ofa-xxl">
           Hi,欢迎使用蜂窝云办公
         </div>
-        <div class="sub-title ofa-text-grey">请输入账号密码登录</div>
-        <form class="login-form">
-          <div class="tips ofa-text-danger" v-show="loginTips">
+        <div class="ofa-text-info ofa-mt20">请输入账号密码登录</div>
+        <form class="login-form ofa-mt20">
+          <div class="tips ofa-text-danger ofa-mb10" v-show="loginTips">
             <font-awesome-icon fas icon="minus-circle"></font-awesome-icon>{{ loginTips }}
           </div>
           <el-input v-model="form.username" placeholder="手机 / 用户名">
@@ -28,7 +28,7 @@
             </template>
           </el-input>
           <div class="type-box">
-            <el-checkbox v-model="form.markUsername" class="ofa-text-grey">记住账号</el-checkbox>
+            <el-checkbox v-model="form.markUsername" class="ofa-text-info">记住账号</el-checkbox>
           </div>
           <div class="button-box">
             <el-button round @click="login" @keyup.enter="keyDown(e)" type="primary" class="login-button">
@@ -36,7 +36,7 @@
               <span v-else>正在登陆<el-icon class="el-icon-loading"></el-icon></span>
             </el-button>
             <el-divider border-style="dotted">
-              <label class="ofa-text-remark">其他方式</label>
+              <label class="ofa-text-info">其他方式</label>
             </el-divider>
             <div class="login-type-box">
               <el-image :src="require('../../assets/img/wechat.svg')" @click="toWxAuthPage"></el-image>
@@ -51,7 +51,7 @@
         <el-link href="https://official.fengwoyun.net/#contact-us" :underline="false">联系我们</el-link>
         <el-link href="https://official.fengwoyun.net" :underline="false">至极科技</el-link>
       </div>
-      <div class="copy-right ofa-text-grey">
+      <div class="copy-right ofa-text-placeholder">
         Copyright &copy; 2019- {{ new Date().Year }} ZhiJi
         Technology Co.,Ltd. All Rights Reserved.
       </div>
@@ -248,25 +248,14 @@ export default {
 
     .title {
       font-family: 'PingFang SC-Semibold, PingFang SC';
-      font-size: 36px;
-      font-weight: 600;
-    }
-
-    .sub-title {
-      margin-top: 10px;
-      font-weight: 500;
-      font-size: 1rem;
-      font-family: 'PingFang SC-Medium, PingFang SC';
     }
 
     .login-form {
-      margin-top: 40px;
       display: flex;
       flex-direction: column;
       flex: 1;
 
       .tips {
-        margin-bottom: 10px;
         margin-right: 4px;
         font-size: 1rem;
         transition: all 0.3s ease-in;

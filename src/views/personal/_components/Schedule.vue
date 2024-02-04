@@ -31,7 +31,7 @@
                   <span>备注内容</span>
                 </div>
                 <el-input show-word-limit type="textarea" placeholder="请输入提醒内容" v-model="entity.Content"
-                  class="textarea-input" maxlength="300"></el-input>
+                  class="textarea-input" maxlength="20"></el-input>
                 <div class="menu-item-box-title1">
                   <img src="./../../../assets/img/sound-fill.svg" alt="">
                   <span>提醒方式</span>
@@ -53,6 +53,7 @@
                     <img src="./../../../assets/img/info-circle.svg" alt="">
                     <span>微信提醒需要关注</span>
                     <span @click="dialogVisible=true">公众号</span>
+                    <span>并发送 绑定账号:账号</span>
                   </div>
                   <div>
                     <el-button type="primary" @click="add" size="small">确定</el-button>
