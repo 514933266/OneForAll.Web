@@ -1,0 +1,34 @@
+// 定时任务
+export interface IJobTask {
+    Id: string
+    // 应用程序id
+	AppId: string
+    // 应用程序密钥
+	AppSecret: string
+    // 所属组名称
+	GroupName: string
+    // 名称
+	Name: string
+    // 状态
+	Status: number
+    // 是否启用
+	IsEnabled: boolean
+     // 运行节点名称
+     NodeName: string
+     // 地址
+     IpAddress: string
+     // 正则表达式
+     Cron: string
+    // 创建时间
+	CreateTime: Date
+    // 修改时间
+	UpdateTime: Date
+    // 最后运行时间
+	RunningTime: Date
+    // 心跳时间
+	HeartbeatTime: Date
+    // 备注
+	Remark: string
+    // 人员列表
+    Persons: string[]
+}

@@ -3,7 +3,7 @@ Date.prototype.toString = function (formatString) {
   /**
    * 兼容性：ie5+
    * default
-   * yyyy-MM-dd HH:mm:ss  => 2016-09-01 01:11:00
+   * YYYY-MM-DD HH:mm:ss  => 2016-09-01 01:11:00
    *
    * other
    * yyyy-M-d h:m:s       => 2016-9-1 1:11:0
@@ -47,7 +47,7 @@ Date.prototype.toString = function (formatString) {
       return old
     })
   } else {
-    return this.toString('yyyy-MM-dd HH:mm:ss')
+    return this.toString('YYYY-MM-DD HH:mm:ss')
   }
 }
 

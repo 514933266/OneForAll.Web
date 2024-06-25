@@ -1,0 +1,35 @@
+// Api日志
+export interface ISysApiLog {
+    // 所属模块名称
+	MoudleName: string
+    // 模块代码
+	MoudleCode: string
+    // 控制器
+	Controller: string
+    // 控制器方法
+	Action: string
+    // 请求域名
+	Host: string
+    // 请求地址
+	Url: string
+    // 请求方法：GET、POST、PUT、DELETE等
+	Method: string
+    // 请求类型，如果是文件类型
+	ContentType: string
+    // 请求Body内容，如果是文件上传类不记录
+	RequestBody: string
+    // 响应内容，如果是下载不记录
+	ReponseBody: string
+    // 完整的浏览器信息
+	UserAgent: string
+    // Ip地址
+	IPAddress: string
+    // 消耗时间
+	TimeSpan: string
+    // 状态码
+	StatusCode: string
+    // 创建人名称
+	CreatorName: string
+    // 创建时间
+	CreateTime: Date
+}
