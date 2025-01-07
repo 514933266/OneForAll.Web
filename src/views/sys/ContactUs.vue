@@ -2,20 +2,13 @@
   <el-container class="contact-us-page">
     <el-header class="header">
       <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="名称 / 联系方式"
-          style="width: 260px"
-        >
+        <el-input enterable v-model="searchOption.key" placeholder="名称 / 联系方式" style="width: 260px">
           <template #prefix>
             <font-awesome-icon fas icon="phone"></font-awesome-icon>
           </template>
         </el-input>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-button @click="search" type="primary" class="ofa-ml10"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
     </el-header>
     <el-main class="content">
@@ -31,38 +24,16 @@
         <el-table-column prop="Name" label="姓名/公司名称"></el-table-column>
         <el-table-column prop="Contact" label="邮箱/电话"></el-table-column>
         <el-table-column prop="Message" label="留言"></el-table-column>
-        <el-table-column
-          prop="CreateTime"
-          label="留言时间"
-          width="180"
-        ></el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-          align="center"
-          header-align="center"
-        >
+        <el-table-column prop="CreateTime" label="留言时间" width="180"></el-table-column>
+        <el-table-column label="操作" width="200" align="center" header-align="center">
           <template #default="scope">
-            <el-button
-              link
-              v-if="permission.Delete"
-              type="danger"
-              @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
@@ -154,8 +125,19 @@ function del(item: ISysContactUs) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

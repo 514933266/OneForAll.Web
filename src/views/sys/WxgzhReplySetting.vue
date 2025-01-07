@@ -2,44 +2,29 @@
   <el-container class="wxgzh-reply-page">
     <el-header class="header">
       <span class="search-box">
-        <el-select
-          v-model="searchOption.appId"
-          placeholder="微信AppId"
-          style="width: 260px"
-        >
-          <el-option
-            v-for="item in clients"
-            :key="item.Id"
-            :label="item.ClientName"
-            :value="item.AppId"
-          ></el-option>
+        <el-select v-model="searchOption.appId" placeholder="微信AppId" style="width: 260px">
+          <el-option v-for="item in clients" :key="item.Id" :label="item.ClientName" :value="item.AppId"></el-option>
         </el-select>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-button @click="search" type="primary" class="ofa-ml10"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
       <span>
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
-          <font-awesome-icon fas icon="plus"></font-awesome-icon
-          >&nbsp;新增回复设置
+          <font-awesome-icon fas icon="plus"></font-awesome-icon>&nbsp;新增回复设置
         </el-button>
       </span>
     </el-header>
     <el-main class="content">
       <div class="title-box">
         <span class="title">
-          微信公众号回复设置列表
+          微信公众号回复设置
           <span class="title-total">
             共有<el-text type="primary">&nbsp;{{ total }}&nbsp;</el-text>条数据
           </span>
         </span>
       </div>
       <el-table v-loading="loading" :data="list" class="ofa-table">
-        <el-table-column
-          prop="ClientName"
-          label="微信客户端名称"
-        ></el-table-column>
+        <el-table-column prop="ClientName" label="微信客户端名称"></el-table-column>
         <el-table-column prop="AppId" label="微信AppId"></el-table-column>
         <el-table-column prop="MsgType" label="消息类型">
           <template #default="scope">{{
@@ -51,124 +36,57 @@
             getReplyTypeStr(scope.row.ReplyType)
           }}</template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-          align="center"
-          header-align="center"
-        >
+        <el-table-column label="操作" width="200" align="center" header-align="center">
           <template #default="scope">
-            <el-button
-              link
-              v-if="permission.Update"
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Delete"
-              type="danger"
-              @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+            <el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
   <!-- 表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="600"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="600" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '新增' : '编辑' }}回复设置</span>
     </template>
-    <el-form
-      status-icon
-      ref="settingForm"
-      :rules="validationRule"
-      :model="entity"
-      label-width="120px"
-    >
+    <el-form status-icon ref="settingForm" :rules="validationRule" :model="entity" label-width="120px">
       <el-form-item label="微信客户端" prop="AppId">
         <el-select v-model="entity.AppId" placeholder="微信AppId">
-          <el-option
-            v-for="item in clients"
-            :key="item.Id"
-            :label="item.ClientName"
-            :value="item.AppId"
-          ></el-option>
+          <el-option v-for="item in clients" :key="item.Id" :label="item.ClientName" :value="item.AppId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="消息类型" prop="MsgType">
         <el-select v-model="entity.MsgType" placeholder="微信发送的消息类型">
-          <el-option
-            v-for="item in WX_GZH_MSG_TYPE"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in WX_GZH_MSG_TYPE" :key="item.value" :label="item.label"
+            :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="回复类型" prop="ReplyType">
         <el-select v-model="entity.ReplyType" placeholder="回复用户的消息类型">
-          <el-option
-            v-for="item in WX_GZH_REPLY_TYPE"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in WX_GZH_REPLY_TYPE" :key="item.value" :label="item.label"
+            :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="Xml模板" prop="XmlContent">
         <template #label>
           <label>
-            <el-tooltip
-              class="box-item"
-              effect="dark"
-              content="请参考微信公众平台接口文档填写"
-              placement="top"
-            >
-              <font-awesome-icon
-                fas
-                icon="info-circle"
-                class="ofa-mr4 ofa-text-warning"
-              ></font-awesome-icon>
+            <el-tooltip class="box-item" effect="dark" content="请参考微信公众平台接口文档填写" placement="top">
+              <font-awesome-icon fas icon="info-circle" class="ofa-mr4 color-warning"></font-awesome-icon>
             </el-tooltip>
             Xml模板
           </label>
         </template>
-        <el-input
-          v-model.trim="entity.XmlContent"
-          :autosize="{ minRows: 6 }"
-          type="textarea"
-          placeholder="Xml模板"
-        ></el-input>
+        <el-input v-model.trim="entity.XmlContent" :autosize="{ minRows: 6 }" type="textarea"
+          placeholder="Xml模板"></el-input>
       </el-form-item>
       <el-form-item label="回复内容" prop="ContentJson">
-        <el-input
-          v-model.trim="entity.ContentJson"
-          :autosize="{ minRows: 6 }"
-          type="textarea"
-          placeholder="回复内容"
-        ></el-input>
+        <el-input v-model.trim="entity.ContentJson" :autosize="{ minRows: 6 }" type="textarea"
+          placeholder="回复内容"></el-input>
       </el-form-item>
     </el-form>
     <div class="footer">
@@ -333,12 +251,18 @@ function del(item: ISysWxgzhReplySetting) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
 
     .search-box {
       display: flex;
-      padding: 10px 0;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
     }
   }
 

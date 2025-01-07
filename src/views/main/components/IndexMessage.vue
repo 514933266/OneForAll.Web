@@ -3,11 +3,7 @@
   <el-dropdown class="index-message">
     <el-button text class="squre-btn">
       <el-badge is-dot class="item" :hidden="unReadCount < 1" size="small">
-        <font-awesome-icon
-          fas
-          icon="bell"
-          class="header-icon"
-        ></font-awesome-icon>
+        <font-awesome-icon fas icon="bell" class="header-icon"></font-awesome-icon>
       </el-badge>
     </el-button>
     <template #dropdown>
@@ -18,11 +14,7 @@
               <el-tab-pane name="1">
                 <template #label>
                   <div class="label" @click="get99Messages">
-                    <font-awesome-icon
-                      fas
-                      icon="bell"
-                      class="icon"
-                    ></font-awesome-icon>
+                    <font-awesome-icon fas icon="bell" class="icon"></font-awesome-icon>
                     <span>未读</span>
                   </div>
                 </template>
@@ -30,11 +22,7 @@
               <el-tab-pane name="2">
                 <template #label>
                   <div class="label" @click="getMessages(3)">
-                    <font-awesome-icon
-                      fas
-                      icon="message"
-                      class="icon"
-                    ></font-awesome-icon>
+                    <font-awesome-icon fas icon="message" class="icon"></font-awesome-icon>
                     <span>近三天</span>
                   </div>
                 </template>
@@ -42,11 +30,7 @@
               <el-tab-pane name="3">
                 <template #label>
                   <div class="label" @click="getMessages(7)">
-                    <font-awesome-icon
-                      fas
-                      icon="envelope"
-                      class="icon"
-                    ></font-awesome-icon>
+                    <font-awesome-icon fas icon="envelope" class="icon"></font-awesome-icon>
                     <span>近一周</span>
                   </div>
                 </template>
@@ -55,15 +39,8 @@
           </div>
           <div class="content">
             <el-empty v-if="!list" description="暂时没有站内通知" />
-            <div
-              v-for="item in list"
-              :key="item.Id"
-              @click="toCenterPage"
-              class="message-item"
-            >
-              <el-avatar
-                ><font-awesome-icon fas icon="envelope"></font-awesome-icon
-              ></el-avatar>
+            <div v-for="item in list" :key="item.Id" @click="toCenterPage" class="message-item">
+              <el-avatar><font-awesome-icon fas icon="envelope"></font-awesome-icon></el-avatar>
               <div class="message-info">
                 <div class="message-title">{{ item.Title }}</div>
                 <div class="message-time">{{ item.CreateTime }}</div>
@@ -72,9 +49,7 @@
           </div>
           <div class="bottom">
             <el-button text type="primary">全部已读</el-button>
-            <el-button text type="info" @click="toCenterPage"
-              >查看全部</el-button
-            >
+            <el-button text type="info" @click="toCenterPage">查看全部</el-button>
           </div>
         </div>
       </el-dropdown-menu>
@@ -85,8 +60,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useBrowserStore } from '@/stores/browserStore'
-import API from '@/apis/base-api.ts'
-import { ISysMessage } from '@/interfaces/sys/ISysMessage'
+import API from '@/apis/ums-api'
+import { ISysMessage } from '@/interfaces/ums/ISysMessage'
 import { MESSAGE_CENTER } from '@/routers/main-router'
 
 const browserStore = useBrowserStore()

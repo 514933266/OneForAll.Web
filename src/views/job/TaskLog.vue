@@ -2,67 +2,31 @@
   <el-container class="login-log-page">
     <el-header class="header">
       <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="关键字"
-          style="width: 200px"
-        >
-          <template #prefix>
-            <font-awesome-icon fas icon="key"></font-awesome-icon>
-          </template>
-        </el-input>
-        <el-date-picker
-          v-model="searchOption.startTime"
-          type="datetime"
-          placeholder="开始日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          style="width: 200px"
-          class="ofa-ml10"
-        >
-        </el-date-picker>
-        <el-date-picker
-          v-model="searchOption.endTime"
-          type="datetime"
-          placeholder="结束日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          style="width: 200px"
-          class="ofa-ml10"
-        >
-        </el-date-picker>
-        <el-input
-          v-model="searchOption.appId"
-          placeholder="应用程序Id"
-          style="width: 200px"
-          class="ofa-ml10"
-        ></el-input>
-        <el-input
-          v-model="searchOption.taskName"
-          placeholder="任务名称"
-          style="width: 200px"
-          class="ofa-ml10"
-        ></el-input>
-        <el-select
-          v-model="searchOption.type"
-          :clearable="true"
-          placeholder="日志类型"
-          style="width: 200px"
-          class="ofa-ml10"
-        >
-          <el-option :value="-1" label="全部类型"></el-option>
-          <el-option
-            v-for="item in TASK_LOG_TYPE"
-            :key="item.value"
-            :value="item.value"
-            :label="item.label"
-          ></el-option>
-        </el-select>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <span class="search-box">
+          <el-input enterable v-model="searchOption.key" placeholder="关键字" style="width: 200px" class="ofa-mr10">
+            <template #prefix>
+              <font-awesome-icon fas icon="key"></font-awesome-icon>
+            </template>
+          </el-input>
+          <el-date-picker v-model="searchOption.startTime" type="datetime" placeholder="开始日期" format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
+          </el-date-picker>
+          <el-date-picker v-model="searchOption.endTime" type="datetime" placeholder="结束日期" format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
+          </el-date-picker>
+        </span>
+        <span class="search-box">
+          <el-input v-model="searchOption.appId" placeholder="应用程序Id" style="width: 200px" class="ofa-mr10"></el-input>
+          <el-input v-model="searchOption.taskName" placeholder="任务名称" style="width: 200px" class="ofa-mr10"></el-input>
+          <el-select v-model="searchOption.type" :clearable="true" placeholder="日志类型" style="width: 200px"
+            class="ofa-mr10">
+            <el-option :value="-1" label="全部类型"></el-option>
+            <el-option v-for="item in TASK_LOG_TYPE" :key="item.value" :value="item.value"
+              :label="item.label"></el-option>
+          </el-select>
+          <el-button @click="search" type="primary"><font-awesome-icon fas
+              icon="search"></font-awesome-icon>&nbsp;查询</el-button>
+        </span>
       </span>
       <span> </span>
     </el-header>
@@ -78,34 +42,19 @@
       <el-table v-loading="loading" :data="list" class="ofa-table">
         <el-table-column prop="Type" label="类型" width="100" align="center">
           <template #default="scope">
-            <el-tag :type="getTypeClass(scope.row)" size="small">{{
+            <el-tag :type="getTypeClass(scope.row)">{{
               getTypeName(scope.row)
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="AppId" label="应用程序id"></el-table-column>
-        <el-table-column prop="TaskName" label="任务名称"></el-table-column>
-        <el-table-column
-          show-overflow-tooltips
-          prop="Content"
-          label="备注"
-        ></el-table-column>
-        <el-table-column
-          prop="CreateTime"
-          label="创建时间"
-          width="200"
-        ></el-table-column>
+        <el-table-column prop="AppId" label="应用程序id" width="200"></el-table-column>
+        <el-table-column prop="TaskName" label="任务名称" width="200"></el-table-column>
+        <el-table-column show-overflow-tooltips prop="Content" label="备注" width="400"></el-table-column>
+        <el-table-column prop="CreateTime" label="创建时间" width="200"></el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
@@ -137,7 +86,7 @@ onMounted(() => {
 
 onActivated(() => {
   const data = history.state.params
-  if (data.AppId) {
+  if (data != null && data.AppId) {
     searchOption.value.appId = data.AppId
     searchOption.value.taskName = data.Name
   }
@@ -214,8 +163,19 @@ function pageIndexChange(value: number) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

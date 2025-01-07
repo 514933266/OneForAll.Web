@@ -4,27 +4,15 @@
     <el-container class="right-container">
       <el-header class="header">
         <div class="breadcrumb-box">
-          <font-awesome-icon
-            fas
-            icon="house-user"
-            class="icon breadcrumb"
-          ></font-awesome-icon>
+          <font-awesome-icon fas icon="house-user" class="icon breadcrumb"></font-awesome-icon>
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item
-              v-for="breadcrumb in breadcrumbStore.breadcrumbs"
-              :key="breadcrumb"
-              class="is-link"
-              >{{ breadcrumb }}
+            <el-breadcrumb-item v-for="breadcrumb in breadcrumbStore.breadcrumbs" :key="breadcrumb" class="is-link">{{
+              breadcrumb }}
             </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="personal-box">
-          <IndexMenuSearchInput
-            style="margin-right: 10px"
-          ></IndexMenuSearchInput>
-          <el-button link @click="toAiPage" class="squre-btn"
-            ><font-awesome-icon fas icon="robot"></font-awesome-icon
-          ></el-button>
+          <IndexMenuSearchInput style="margin-right: 10px"></IndexMenuSearchInput>
           <IndexMessage></IndexMessage>
           <IndexSchedule></IndexSchedule>
           <IndexUserCard></IndexUserCard>
@@ -36,30 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue'
 import { useBrowserStore } from '@/stores/browserStore'
-import { useClientStore } from '@/stores/clientStore'
-import { useUserStore } from '@/stores/userStore'
-import { useTokenStore } from '@/stores/tokenStore'
 import { usebreadcrumbStore } from '@/stores/breadcrumbStore'
 import { IPersonalMenuTree } from '@/interfaces/IPersonalMenuTree'
-import router from '@/untils/router'
-import axios from '@/untils/axios'
-import { TONGYIQIANWEN } from '@/routers/main-router'
 import IndexLeftMenu from './components/IndexLeftMenu.vue'
 import IndexMessage from './components/IndexMessage.vue'
 import IndexUserCard from './components/IndexUserCard.vue'
 import IndexSchedule from './components/IndexSchedule.vue'
 import IndexBrowser from './components/IndexBrowser.vue'
 import IndexMenuSearchInput from './components/IndexMenuSearchInput.vue'
-
-// 依赖注入全局对象提供给子模块加载后调用
-provide('browserStore', useBrowserStore())
-provide('clientStore', useClientStore())
-provide('userStore', useUserStore())
-provide('tokenStore', useTokenStore())
-provide('router', router)
-provide('axios', axios)
 
 const browserStore = useBrowserStore()
 const breadcrumbStore = usebreadcrumbStore()
@@ -88,11 +61,6 @@ function checkMode(menu: IPersonalMenuTree) {
     location: regx.test(menu.Url),
     route: true
   }
-}
-
-// 跳转通义千问页面
-function toAiPage() {
-  browserStore.navigate(TONGYIQIANWEN)
 }
 </script>
 

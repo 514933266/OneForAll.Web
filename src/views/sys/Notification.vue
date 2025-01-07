@@ -7,9 +7,8 @@
 						<font-awesome-icon fas icon="user"></font-awesome-icon>
 					</template>
 				</el-input>
-				<el-button @click="search" type="primary" class="ofa-ml10"
-					><font-awesome-icon fas icon="search"></font-awesome-icon>&nbsp;查询</el-button
-				>
+				<el-button @click="search" type="primary" class="ofa-ml10"><font-awesome-icon fas
+						icon="search"></font-awesome-icon>&nbsp;查询</el-button>
 			</span>
 			<span>
 				<el-button v-if="permission.Add" @click="showDrawer()" type="primary">
@@ -50,24 +49,17 @@
 				</el-table-column>
 				<el-table-column label="操作" width="200" align="center" header-align="center">
 					<template #default="scope">
-						<el-button link v-if="permission.Update" @click="showDrawer(scope.row)" type="primary">修改</el-button>
-						<el-button link v-if="permission.Update && !scope.row.IsPublish" @click="publish(scope.row)" type="primary"
-							>发布</el-button
-						>
+						<el-button link v-if="permission.Update" @click="showDrawer(scope.row)"
+							type="primary">修改</el-button>
+						<el-button link v-if="permission.Update && !scope.row.IsPublish" @click="publish(scope.row)"
+							type="primary">发布</el-button>
 						<el-button link v-if="permission.Delete" @click="del(scope.row)" type="danger">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
-				background
-				layout="total, sizes, prev, pager, next, jumper"
-				v-model:current-page="pageIndex"
-				:page-sizes="[10, 20, 50, 100]"
-				v-model:page-size="pageSize"
-				:total="total"
-				@size-change="pageSizeChange"
-				@current-change="pageIndexChange"
-			>
+			<el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+				:page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total"
+				@size-change="pageSizeChange" @current-change="pageIndexChange">
 			</el-pagination>
 		</el-main>
 	</el-container>
@@ -79,49 +71,27 @@
 			</el-form-item>
 			<el-form-item label="类型" prop="Content">
 				<el-radio-group v-model="entity.Type">
-					<el-radio v-for="item in NOTIFICATION_TYPE" :key="item.value" :value="item.value">{{ item.label }}</el-radio>
+					<el-radio v-for="item in NOTIFICATION_TYPE" :key="item.value" :value="item.value">{{ item.label
+						}}</el-radio>
 				</el-radio-group>
 			</el-form-item>
-			<el-form-item
-				v-show="entity.Type === 2"
-				label="账号列表"
-				prop="ToAccounts"
-				:rules="{
-					required: entity.Type === 2,
-					message: '请先选择通知账号',
-					trigger: 'blur'
-				}"
-			>
+			<el-form-item v-show="entity.Type === 2" label="账号列表" prop="ToAccounts" :rules="{
+				required: entity.Type === 2,
+				message: '请先选择通知账号',
+				trigger: 'blur'
+			}">
 				<div class="fix-account-box">
-					<el-select
-						filterable
-						remote
-						reserve-keyword
-						:remote-method="getUsers"
-						placeholder="输入用户名称或账号搜索"
-						style="width: 300px"
-					>
+					<el-select filterable remote reserve-keyword :remote-method="getUsers" placeholder="输入用户名称或账号搜索"
+						style="width: 300px">
 						<template #prefix>
 							<font-awesome-icon fas icon="user"></font-awesome-icon>
 						</template>
-						<el-option
-							v-for="item in users"
-							:key="item.Id"
-							:label="item.Name"
-							:value="item.Id"
-							@click="selectAccount(item)"
-						></el-option>
+						<el-option v-for="item in users" :key="item.Id" :label="item.Name" :value="item.Id"
+							@click="selectAccount(item)"></el-option>
 					</el-select>
 					<div class="user-tags">
-						<el-tag
-							closable
-							v-for="item in userSelections"
-							:key="item.Id"
-							@close="removeAccount(item)"
-							effect="dark"
-							class="ofa-ml4"
-							>{{ item.Name }}</el-tag
-						>
+						<el-tag closable v-for="item in userSelections" :key="item.Id" @close="removeAccount(item)"
+							effect="dark" class="ofa-ml4">{{ item.Name }}</el-tag>
 					</div>
 				</div>
 			</el-form-item>
@@ -318,8 +288,19 @@ function upload(blob: any, success: any, failure: any) {
 	.header {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
 		flex-wrap: wrap;
+		height: auto;
+
+		.search-box {
+			display: flex;
+			align-items: center;
+			padding: 6px 4px;
+		}
+
+		.button-box {
+			display: flex;
+			align-items: flex-start;
+		}
 	}
 
 	.title-box {

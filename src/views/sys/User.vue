@@ -1,23 +1,16 @@
 <template>
   <el-container class="user-page">
     <el-header class="header">
-      <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="用户账号 / 名称"
-          style="width: 260px"
-        >
+      <span class="search-box">
+        <el-input enterable v-model="searchOption.key" placeholder="用户账号 / 名称" style="width: 260px" class="ofa-mr10">
           <template #prefix>
             <font-awesome-icon fas icon="user"></font-awesome-icon>
           </template>
         </el-input>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-button @click="search" type="primary"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
-      <span>
+      <span class="button-box">
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
           <font-awesome-icon fas icon="plus"></font-awesome-icon>&nbsp;创建账号
         </el-button>
@@ -33,7 +26,7 @@
         </span>
       </div>
       <el-table v-loading="loading" :data="list" class="ofa-table">
-        <el-table-column prop="Name" label="名称">
+        <el-table-column prop="Name" label="名称" width="200">
           <template #default="scope">
             <div class="user-icon">
               <el-avatar :src="domain + scope.row.IconUrl">
@@ -43,13 +36,12 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="UserName" label="账号"></el-table-column>
-        <el-table-column prop="TenantName" label="所属企业"></el-table-column>
-        <el-table-column label="账号类型">
+        <el-table-column prop="UserName" label="账号" width="200"></el-table-column>
+        <el-table-column prop="TenantName" label="所属企业" width="300"></el-table-column>
+        <el-table-column label="账号类型" width="100">
           <template #default="scope">
             <el-tag :type="scope.row.IsDefault ? 'primary' : 'info'">
-              {{ scope.row.IsDefault ? '管理员' : '普通账号' }}</el-tag
-            >
+              {{ scope.row.IsDefault ? '管理员' : '普通账号' }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="最后登录时间" width="180">
@@ -57,120 +49,59 @@
             scope.row.LastLoginTime ? scope.row.LastLoginTime : '未登录'
           }}</template>
         </el-table-column>
-        <el-table-column label="最后登录Ip">
+        <el-table-column label="最后登录Ip" width="140">
           <template #default="scope">{{
             scope.row.LastLoginIp ? scope.row.LastLoginIp : '未登录'
           }}</template>
         </el-table-column>
-        <el-table-column label="状态" align="center">
+        <el-table-column label="状态" align="center" width="100">
           <template #default="scope">
-            <el-tag
-              effect="dark"
-              :type="scope.row.Status !== 1 ? 'danger' : 'success'"
-              >{{ getStatusStr(scope.row.Status) }}</el-tag
-            >
+            <el-tag effect="dark" :type="scope.row.Status !== 1 ? 'danger' : 'success'">{{
+              getStatusStr(scope.row.Status) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" fixed="right" width="140">
           <template #default="scope">
-            <el-button
-              v-if="permission.Update"
-              link
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改
+            <el-button v-if="permission.Update" link type="primary" @click="showDrawer(scope.row)">修改
             </el-button>
-            <el-button
-              v-if="permission.Delete"
-              link
-              type="danger"
-              @click="del(scope.row)"
-            >
-              删除</el-button
-            >
+            <el-button v-if="permission.Delete" link type="danger" @click="del(scope.row)">
+              删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
   <!-- 用户表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="460"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '创建' : '编辑' }}账号</span>
     </template>
-    <el-form
-      status-icon
-      ref="userForm"
-      :rules="validationRule"
-      :model="entity"
-      class="form"
-      label-width="80px"
-    >
-      <el-alert
-        title="操作提示"
-        type="warning"
-        style="margin-bottom: 20px"
-        :closable="false"
-        description="创建账号后密码默认与账号相同，默认用户权限和租户同步"
-      ></el-alert>
+    <el-form status-icon ref="userForm" :rules="validationRule" :model="entity" class="form" label-width="80px">
+      <el-alert title="操作提示" type="warning" style="margin-bottom: 20px" :closable="false"
+        description="创建账号后密码默认与账号相同，默认用户权限和租户同步"></el-alert>
       <el-form-item label="是否默认">
         <el-switch v-model="entity.IsDefault"></el-switch>
       </el-form-item>
       <el-form-item label="所属机构" prop="TenantId">
-        <el-select
-          filterable
-          remote
-          v-model="entity.TenantId"
-          :remote-method="getTenants"
-          placeholder="请输入机构名称进行查询"
-        >
-          <el-option
-            v-for="item in tenants"
-            :key="item.Id"
-            :label="item.Name"
-            :value="item.Id"
-          >
+        <el-select filterable remote v-model="entity.TenantId" :remote-method="getTenants" placeholder="请输入机构名称进行查询">
+          <el-option v-for="item in tenants" :key="item.Id" :label="item.Name" :value="item.Id">
             <span class="float-left">{{ item.Name }}</span>
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="账号" prop="UserName">
-        <el-input
-          v-model.trim="entity.UserName"
-          :disabled="!isAdd"
-          placeholder="请输入用户账号"
-        >
+        <el-input v-model.trim="entity.UserName" :disabled="!isAdd" placeholder="请输入用户账号">
         </el-input>
       </el-form-item>
       <el-form-item label="名称" prop="Name">
-        <el-input
-          v-model.trim="entity.Name"
-          placeholder="请输入用户名称"
-        ></el-input>
+        <el-input v-model.trim="entity.Name" placeholder="请输入用户名称"></el-input>
       </el-form-item>
       <el-form-item label="手机号码" prop="Mobile">
-        <el-input
-          v-model.trim="entity.Mobile"
-          placeholder="请输入用户手机号码"
-        ></el-input>
+        <el-input v-model.trim="entity.Mobile" placeholder="请输入用户手机号码"></el-input>
       </el-form-item>
       <el-form-item label="状态" prop="Status">
         <el-select v-model="entity.Status" placeholder="请选择账号初始状态">
@@ -356,8 +287,19 @@ function del(item: ISysUser) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

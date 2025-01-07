@@ -1,29 +1,17 @@
 <template>
   <el-container class="menu-page">
     <el-header class="header">
-      <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="菜单名称 / 代码"
-          style="width: 260px"
-        >
+      <span class="search-box">
+        <el-input enterable v-model="searchOption.key" placeholder="菜单名称 / 代码" style="width: 260px" class="ofa-mr10">
           <template #prefix>
             <font-awesome-icon fas icon="bars"></font-awesome-icon>
           </template>
         </el-input>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-button @click="search" type="primary" class="ofa-mr10"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
       <span>
-        <el-button
-          link
-          v-if="permission.Update"
-          @click="showSortArrow = !showSortArrow"
-          type="primary"
-        >
+        <el-button link v-if="permission.Update" @click="showSortArrow = !showSortArrow" type="primary">
           {{ showSortArrow ? '完成排序' : '调整排序' }}
         </el-button>
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
@@ -40,169 +28,75 @@
           </span>
         </span>
       </div>
-      <el-table
-        v-loading="loading"
-        :data="list"
-        :tree-props="{ children: 'Children' }"
-        row-key="Id"
-        class="ofa-table"
-      >
-        <el-table-column label="名称" prop="Name"></el-table-column>
+      <el-table v-loading="loading" :data="list" :tree-props="{ children: 'Children' }" row-key="Id" class="ofa-table">
+        <el-table-column label="名称" prop="Name" width="300"></el-table-column>
         <el-table-column label="图标" prop="Icon" width="100" align="center">
           <template #default="scope">
-            <font-awesome-icon
-              v-if="scope.row.Icon"
-              fas
-              :icon="scope.row.Icon"
-            ></font-awesome-icon>
+            <font-awesome-icon v-if="scope.row.Icon" fas :icon="scope.row.Icon"></font-awesome-icon>
           </template>
         </el-table-column>
-        <el-table-column label="代码" prop="Code"></el-table-column>
-        <el-table-column label="Url" prop="Url"></el-table-column>
-        <el-table-column
-          label="类型"
-          prop="Type"
-          width="160"
-          align="center"
-          header-align="center"
-        >
+        <el-table-column label="代码" prop="Code" width="200"></el-table-column>
+        <el-table-column label="类型" prop="Type" width="160" align="center" header-align="center">
           <template #default="scope">
             <el-tag>{{ getTypeStr(scope.row.Type) }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          show-overflow-tooltip
-          label="备注"
-          prop="Remark"
-        ></el-table-column>
-        <el-table-column
-          label="状态"
-          prop="IsEnabled"
-          align="center"
-          header-align="center"
-          width="100"
-        >
+        <el-table-column show-overflow-tooltip label="备注" prop="Remark" width="300"></el-table-column>
+        <el-table-column label="状态" prop="IsEnabled" align="center" header-align="center" width="100">
           <template #default="scope">
-            <el-switch
-              v-model="scope.row.IsEnabled"
-              @change="updateIsEnabled(scope.row)"
-              style="
+            <el-switch v-model="scope.row.IsEnabled" @change="updateIsEnabled(scope.row)" style="
                 --el-switch-on-color: #13ce66;
                 --el-switch-off-color: #ff4949;
-              "
-            />
+              " />
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" header-align="center">
+        <el-table-column label="操作" align="center" header-align="center" width="200" fixed="right">
           <template #default="scope">
-            <el-button
-              link
-              v-show="showSortArrow"
-              @click="sort(scope.row, true)"
-              type="success"
-              >升序</el-button
-            >
-            <el-button
-              link
-              v-show="showSortArrow"
-              @click="sort(scope.row, false)"
-              type="success"
-              >降序</el-button
-            >
-            <el-button link @click="showCopyDialog(scope.row)" type="primary"
-              >克隆</el-button
-            >
-            <el-button link @click="toDetailPage(scope.row)" type="primary"
-              >权限</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Update"
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Delete"
-              type="danger"
-              @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link v-show="showSortArrow" @click="sort(scope.row, true)" type="success">升序</el-button>
+            <el-button link v-show="showSortArrow" @click="sort(scope.row, false)" type="info">降序</el-button>
+            <el-button link @click="showCopyDialog(scope.row)" type="primary">克隆</el-button>
+            <el-button link @click="toDetailPage(scope.row)" type="primary">权限</el-button>
+            <el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+            <el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-main>
   </el-container>
   <!-- 表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="460"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '新增' : '编辑' }}菜单</span>
     </template>
-    <el-form
-      status-icon
-      ref="menuForm"
-      :rules="validationRule"
-      :model="entity"
-      label-width="120px"
-    >
+    <el-form status-icon ref="menuForm" :rules="validationRule" :model="entity" label-width="120px">
       <el-form-item label="名称" prop="Name">
         <el-input v-model="entity.Name" placeholder="请输入菜单名称"></el-input>
       </el-form-item>
       <el-form-item label="上级" prop="ParentId">
-        <el-cascader
-          v-model="treePath"
-          :props="{
-            children: 'Children',
-            value: 'Id',
-            label: 'Name',
-            checkStrictly: true
-          }"
-          :show-all-levels="false"
-          :options="rootTree"
-          placeholder="请选择上级菜单"
-        ></el-cascader>
+        <el-cascader v-model="treePath" :props="{
+          children: 'Children',
+          value: 'Id',
+          label: 'Name',
+          checkStrictly: true
+        }" :show-all-levels="false" :options="rootTree" placeholder="请选择上级菜单"></el-cascader>
       </el-form-item>
       <el-form-item label="类型" prop="Type">
         <el-select v-model="entity.Type" @change="changeOpenType">
-          <el-option
-            v-for="item in MENU_TYPE"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+          <el-option v-for="item in MENU_TYPE" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="打开方式" prop="OpenType">
         <el-select v-model="entity.OpenType">
           <el-option label="无" :value="-1"> </el-option>
-          <el-option
-            v-for="item in MNUE_OPEN_TYPE"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+          <el-option v-for="item in MNUE_OPEN_TYPE" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="图标">
         <template #label>
           <div class="icon-label-box">
-            <font-awesome-icon
-              v-if="entity.Icon"
-              fas
-              :icon="entity.Icon"
-              class="ofa-mr4"
-            ></font-awesome-icon
-            >图标
+            <font-awesome-icon v-if="entity.Icon" fas :icon="entity.Icon" class="ofa-mr4"></font-awesome-icon>图标
           </div>
         </template>
         <el-input v-model="entity.Icon" placeholder="fontawesome图标">
@@ -212,56 +106,24 @@
         <el-input v-model="entity.Code" placeholder="请输入菜单代码"></el-input>
       </el-form-item>
       <el-form-item label="排序" prop="SortNumber">
-        <el-input
-          v-model="entity.SortNumber"
-          placeholder="菜单会根据此值由小到大排序"
-        ></el-input>
+        <el-input v-model="entity.SortNumber" placeholder="菜单会根据此值由小到大排序"></el-input>
       </el-form-item>
       <div class="row">
         <el-form-item label="设置">
-          <el-switch
-            inline-prompt
-            v-model="entity.IsEnabled"
-            active-text="启用"
-            inactive-text="停用"
-            class="ofa-mr10"
-          ></el-switch>
-          <el-switch
-            inline-prompt
-            v-model="entity.IsDefault"
-            active-text="默认"
-            inactive-text="普通"
-          ></el-switch>
+          <el-switch inline-prompt v-model="entity.IsEnabled" active-text="启用" inactive-text="停用"
+            class="ofa-mr10"></el-switch>
+          <el-switch inline-prompt v-model="entity.IsDefault" active-text="默认" inactive-text="普通"></el-switch>
         </el-form-item>
       </div>
       <el-form-item label="链接地址" prop="Url" class="url-item">
-        <el-input
-          v-model="entity.Url"
-          class="url-input"
-          placeholder="当菜单远程组件时，请输入Web地址"
-        ></el-input>
+        <el-input v-model="entity.Url" class="url-input" placeholder="当菜单远程组件时，请输入Web地址"></el-input>
       </el-form-item>
-      <el-form-item
-        v-show="entity.Type === 1"
-        label="Api地址"
-        prop="ApiUrl"
-        class="url-item"
-      >
-        <el-input
-          v-model="entity.ApiUrl"
-          class="url-input"
-          placeholder="当菜单远程组件时，请输入Api地址"
-        ></el-input>
+      <el-form-item v-show="entity.Type === 1" label="Api地址" prop="ApiUrl" class="url-item">
+        <el-input v-model="entity.ApiUrl" class="url-input" placeholder="当菜单远程组件时，请输入Api地址"></el-input>
       </el-form-item>
       <el-form-item label="备注" prop="Remark" class="remark-item">
-        <el-input
-          show-word-limit
-          v-model="entity.Remark"
-          type="textarea"
-          class="remark-textarea"
-          placeholder="请输入菜单备注"
-          maxlength="300"
-        >
+        <el-input show-word-limit v-model="entity.Remark" type="textarea" class="remark-textarea" placeholder="请输入菜单备注"
+          maxlength="300">
         </el-input>
       </el-form-item>
     </el-form>
@@ -271,11 +133,7 @@
     </div>
   </el-drawer>
   <!-- 弹窗 -->
-  <el-dialog
-    v-model="dialogVisible"
-    :title="'克隆到【' + entity.Name + '】'"
-    width="600px"
-  >
+  <el-dialog v-model="dialogVisible" :title="'克隆到【' + entity.Name + '】'" width="600px">
     <el-alert show-icon title="操作提示" type="warning">
       <ul class="tips">
         <li>勾选的内容会添加成为菜单【{{ entity.Name }}】的子级菜单</li>
@@ -283,18 +141,13 @@
       </ul>
     </el-alert>
     <div class="menu-copy-box">
-      <el-cascader
-        v-model="copyIds"
-        :options="list"
-        :props="{
-          children: 'Children',
-          value: 'Id',
-          label: 'Name',
-          checkStrictly: true,
-          multiple: true
-        }"
-        clearable
-      />
+      <el-cascader v-model="copyIds" :options="list" :props="{
+        children: 'Children',
+        value: 'Id',
+        label: 'Name',
+        checkStrictly: true,
+        multiple: true
+      }" clearable />
     </div>
     <template #footer>
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -518,8 +371,19 @@ function toDetailPage(item: ISysMenuTree) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

@@ -18,36 +18,29 @@
 				</span>
 			</div>
 			<el-table v-loading="loading" :data="list" class="ofa-table">
-				<el-table-column prop="ClientId" label="客户端Id"></el-table-column>
-				<el-table-column prop="ClientSecret" label="客户端密码"></el-table-column>
-				<el-table-column prop="ClientName" label="客户端名称"></el-table-column>
-				<el-table-column prop="Type" label="客户端类型">
+				<el-table-column prop="ClientId" label="客户端Id" width="200"></el-table-column>
+				<el-table-column prop="ClientSecret" label="客户端密码" width="200"></el-table-column>
+				<el-table-column prop="ClientName" label="客户端名称" width="200"></el-table-column>
+				<el-table-column prop="Type" label="客户端类型" width="160">
 					<template #default="scope">
 						<el-tag>{{ getTypeStr(scope.row.Type) }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="Role" label="登录角色"></el-table-column>
-				<el-table-column prop="AutoCreateAccount" label="自动注册" align="center">
+				<el-table-column prop="Role" label="登录角色" width="160"></el-table-column>
+				<el-table-column prop="AutoCreateAccount" label="自动注册" align="center" width="160">
 					<template #header>
 						<label>
-							<el-tooltip
-								class="box-item"
-								effect="dark"
-								content="如果勾选，则在登录时自动创建系统账号，否则需要走注册流程"
-								placement="top"
-							>
-								<font-awesome-icon fas icon="info-circle" class="ofa-mr4 ofa-text-warning"></font-awesome-icon>
+							<el-tooltip class="box-item" effect="dark" content="如果勾选，则在登录时自动创建系统账号，否则需要走注册流程"
+								placement="top">
+								<font-awesome-icon fas icon="info-circle"
+									class="ofa-mr4 color-warning"></font-awesome-icon>
 							</el-tooltip>
 							自动注册
 						</label>
 					</template>
-					<template #default="scope"
-						><font-awesome-icon
-							fas
+					<template #default="scope"><font-awesome-icon fas
 							:icon="scope.row.AutoCreateAccount ? 'check' : 'times'"
-							:class="scope.row.AutoCreateAccount ? 'ofa-text-success' : 'ofa-text-danger'"
-						></font-awesome-icon
-						>&nbsp;
+							:class="scope.row.AutoCreateAccount ? 'color-success' : 'color-danger'"></font-awesome-icon>&nbsp;
 					</template>
 				</el-table-column>
 				<el-table-column prop="CreateTime" label="创建时间" width="200px">
@@ -55,9 +48,10 @@
 						{{ dayjs(scope.row.CreateTime).format('YYYY-MM-DD HH:mm') }}
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="200" align="center" header-align="center">
+				<el-table-column label="操作" width="200" align="center" header-align="center" fixed="right">
 					<template #default="scope">
-						<el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+						<el-button link v-if="permission.Update" type="primary"
+							@click="showDrawer(scope.row)">修改</el-button>
 						<el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -65,7 +59,8 @@
 		</el-main>
 	</el-container>
 	<!-- 表单 -->
-	<el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
+	<el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460"
+		class="ofa-drawer">
 		<template #header>
 			<span class="title">{{ isAdd ? '新增' : '编辑' }}客户端</span>
 		</template>
@@ -81,7 +76,8 @@
 			</el-form-item>
 			<el-form-item label="客户端类型" prop="Type">
 				<el-select v-model="entity.Type">
-					<el-option v-for="item in CLIENT_TYPE" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+					<el-option v-for="item in CLIENT_TYPE" :key="item.value" :label="item.label" :value="item.value">
+					</el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="登录角色" prop="Role">
@@ -90,13 +86,9 @@
 			<el-form-item label="自动注册" prop="AutoCreateAccount">
 				<template #label>
 					<label>
-						<el-tooltip
-							class="box-item"
-							effect="dark"
-							content="如果勾选，则在登录时自动创建系统账号，否则需要走注册流程"
-							placement="top"
-						>
-							<font-awesome-icon fas icon="info-circle" class="ofa-mr4 ofa-text-warning"></font-awesome-icon>
+						<el-tooltip class="box-item" effect="dark" content="如果勾选，则在登录时自动创建系统账号，否则需要走注册流程"
+							placement="top">
+							<font-awesome-icon fas icon="info-circle" class="ofa-mr4 color-warning"></font-awesome-icon>
 						</el-tooltip>
 						自动注册
 					</label>
@@ -226,8 +218,19 @@ function del(item: ISysClient) {
 	.header {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
 		flex-wrap: wrap;
+		height: auto;
+
+		.search-box {
+			display: flex;
+			align-items: center;
+			padding: 6px 4px;
+		}
+
+		.button-box {
+			display: flex;
+			align-items: flex-start;
+		}
 	}
 
 	.title-box {

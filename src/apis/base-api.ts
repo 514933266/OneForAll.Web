@@ -5,7 +5,6 @@ import { useUserStore } from '../stores/userStore'
 import { IBaseMessage } from '../interfaces/IBaseMessage'
 import { IBasePage } from '../interfaces/IBasePage'
 import { IPersonalMenuTree } from '../interfaces/IPersonalMenuTree'
-import { ISysMessage } from '../interfaces/base/ISysMessage'
 import { ILoginUser } from '../interfaces/ILoginUser'
 import { ISysTenantUser } from '../interfaces/base/ISysTenantUser'
 import { ISysTenantRole } from '../interfaces/base/ISysTenantRole'
@@ -43,36 +42,6 @@ const API = {
 	getSubMenus(): Promise<IPersonalMenuTree[]> {
 		const url = `${useClient.baseApi}/api/SysPersonal/SubMenus`
 		return axios.get(url)
-	},
-	// 获取站内信
-	getTopMessages(top?: number): Promise<ISysMessage[]> {
-		const url = `${useClient.baseApi}/api/SysPersonalMessages/${top ?? 10}`
-		return axios.get(url)
-	},
-	// 获取站内信
-	getMessages(day?: number): Promise<ISysMessage[]> {
-		const url = `${useClient.baseApi}/api/SysPersonalMessages/${day ?? 3}/UnReads`
-		return axios.get(url)
-	},
-	// 获取站内信分页
-	getPageMessage(pageIndex: number, pageSize: number, status: number, key?: string): Promise<IBasePage<ISysMessage>> {
-		const url = `${useClient.baseApi}/api/SysPersonalMessages/${pageIndex}/${pageSize}`
-		return axios.get(url, { params: { key: key, status: status }})
-	},
-	// 获取未读消息数量
-	getMessageCount(): Promise<number> {
-		const url = `${useClient.baseApi}/api/SysPersonalMessages/UnReadCount`
-		return axios.get(url)
-	},
-	// 设置消息已读
-	readMessage(ids: string[], isQuiet?: boolean): Promise<IBaseMessage> {
-		const url = `${useClient.baseApi}/api/SysPersonalMessages/Batch/IsRead?isQuiet=${isQuiet}`
-		return axios.patch(url, ids)
-	},
-	// 清空消息
-	deleteMessage(ids: string[]): Promise<IBaseMessage> {
-		const url = `${useClient.baseApi}/api/SysPersonalMessages/Batch/IsDeleted`
-		return axios.patch(url, ids)
 	},
 	// 获取个人信息
 	getLoginUser(): Promise<ILoginUser> {

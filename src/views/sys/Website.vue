@@ -2,20 +2,13 @@
   <el-container class="website-page">
     <el-header class="header">
       <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="站点名称 / 域名"
-          style="width: 260px"
-        >
+        <el-input enterable v-model="searchOption.key" placeholder="站点名称 / 域名" style="width: 260px">
           <template #prefix>
             <font-awesome-icon fas icon="globe"></font-awesome-icon>
           </template>
         </el-input>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-button @click="search" type="primary" class="ofa-ml10"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
       <span>
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
@@ -33,137 +26,57 @@
         </span>
       </div>
       <el-table v-loading="loading" :data="list" class="ofa-table">
-        <el-table-column prop="Name" label="网站名称"></el-table-column>
-        <el-table-column prop="Host" label="域名"></el-table-column>
-        <el-table-column
-          prop="OAuthClientId"
-          label="客户端id"
-        ></el-table-column>
-        <el-table-column
-          prop="OAuthClientSecret"
-          label="客户端密码"
-        ></el-table-column>
-        <el-table-column
-          prop="OAuthClientName"
-          label="客户端名称"
-        ></el-table-column>
-        <el-table-column
-          prop="OAuthUrl"
-          label="请求授权服务地址"
-        ></el-table-column>
+        <el-table-column prop="Name" label="网站名称" width="300"></el-table-column>
+        <el-table-column prop="Host" label="域名" width="300"></el-table-column>
+        <el-table-column prop="OAuthClientId" label="客户端id" width="200"></el-table-column>
+        <el-table-column prop="OAuthClientSecret" label="客户端密码" width="200"></el-table-column>
+        <el-table-column prop="OAuthClientName" label="客户端名称" width="200"></el-table-column>
         <el-table-column prop="CreateTime" label="创建时间" width="200px">
           <template #default="scope">
-            {{ dayjs(scope.row.CreateTime).format('YYYY-MM-DD HH:mm') }}
+            {{ dayjs(scope.row.CreateTime).format('YYYY年MM月DD日 HH:mm') }}
           </template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-          align="center"
-          header-align="center"
-        >
+        <el-table-column label="操作" width="200" align="center" header-align="center" fixed="right">
           <template #default="scope">
-            <el-button link @click="toApiPage(scope.row)" type="primary"
-              >API列表</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Update"
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Delete"
-              type="danger"
-              @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link @click="toApiPage(scope.row)" type="primary">API列表</el-button>
+            <el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+            <el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
   <!-- 表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="460"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '新增' : '编辑' }}站点</span>
     </template>
-    <el-form
-      status-icon
-      ref="websiteForm"
-      :rules="validationRule"
-      :model="entity"
-      class="form"
-      label-width="120px"
-    >
+    <el-form status-icon ref="websiteForm" :rules="validationRule" :model="entity" class="form" label-width="120px">
       <el-form-item label="所属机构" prop="Name" class="row-item">
-        <el-select
-          filterable
-          remote
-          :remote-method="getTenants"
-          v-model.trim="entity.Name"
-          placeholder="请搜索后选择"
-        >
-          <el-option
-            v-for="item in tenants"
-            :key="item.Id"
-            :label="item.Name"
-            :value="item.Name"
-          >
+        <el-select filterable remote :remote-method="getTenants" v-model.trim="entity.Name" placeholder="请搜索后选择">
+          <el-option v-for="item in tenants" :key="item.Id" :label="item.Name" :value="item.Name">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="域名" prop="Host" class="row-item">
-        <el-input
-          v-model.trim="entity.Host"
-          placeholder="请输入应用的域名"
-        ></el-input>
+        <el-input v-model.trim="entity.Host" placeholder="请输入应用的域名"></el-input>
       </el-form-item>
       <el-form-item label="客户端Id" prop="OAuthClientId" class="row-item">
-        <el-input
-          v-model.trim="entity.OAuthClientId"
-          placeholder="请输入客户端Id"
-        >
+        <el-input v-model.trim="entity.OAuthClientId" placeholder="请输入客户端Id">
         </el-input>
       </el-form-item>
       <el-form-item label="密码" prop="OAuthClientSecret" class="row-item">
-        <el-input
-          type="password"
-          v-model.trim="entity.OAuthClientSecret"
-          placeholder="请输入客户端密码"
-        ></el-input>
+        <el-input type="password" v-model.trim="entity.OAuthClientSecret" placeholder="请输入客户端密码"></el-input>
       </el-form-item>
       <el-form-item label="客户端名称" prop="OAuthClientName" class="row-item">
-        <el-input
-          v-model.trim="entity.OAuthClientName"
-          placeholder="请输入客户端名称"
-        ></el-input>
+        <el-input v-model.trim="entity.OAuthClientName" placeholder="请输入客户端名称"></el-input>
       </el-form-item>
       <el-form-item label="授权地址" prop="OAuthUrl" class="row-item">
-        <el-input
-          v-model.trim="entity.OAuthUrl"
-          placeholder="请输入授权地址"
-        ></el-input>
+        <el-input v-model.trim="entity.OAuthUrl" placeholder="请输入授权地址"></el-input>
       </el-form-item>
     </el-form>
     <div class="footer">
@@ -345,8 +258,19 @@ function toApiPage(item: ISysWebsite) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

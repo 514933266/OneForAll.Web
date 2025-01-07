@@ -29,6 +29,22 @@ li {
 	overflow: hidden;
 }
 
+// 基础颜色
+.color-warning {
+	color: var(--el-color-warning);
+}
+
+.color-success {
+	color: var(--el-color-success);
+}
+
+.color-primary {
+	color: var(--el-color-primary);
+}
+
+.color-danger {
+	color: var(--el-color-danger);
+}
 // 表单
 .ofa-form {
 	flex: 1;
@@ -227,22 +243,31 @@ li {
 	margin-bottom: 25px;
 	border-bottom: 0;
 
-	.el-table__header {
-		background-color: #ecf5ff;
-		border-radius: 10px;
+	.el-table__header-wrapper {
+		border-radius: 20px;
+		background-color:#ecf5ff;
 		margin-bottom: 10px;
+	}
+
+	.el-table__header {
+		background-color: transparent;
 
 		th,
 		tr {
 			padding: 12px 0;
-			background-color: transparent !important;
 			color: #303133;
-			border: none !important;
+			background-color: transparent;
+		}
+
+		.el-table-fixed-column--right {
+			background-color:#ecf5ff !important;
 		}
 	}
 
-	.el-table__cell {
-		padding: 12px 0;
+	.el-table__body {
+		.el-table__cell {
+			padding: 10px 0;
+		}
 	}
 }
 

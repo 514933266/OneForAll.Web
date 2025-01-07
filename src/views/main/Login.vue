@@ -10,25 +10,28 @@
 				</div>
 				<div class="title">Hi,欢迎使用蜂窝云办公</div>
 				<div class="tips-title">请输入账号密码登录</div>
-				<div class="tips" v-show="loginTips"><font-awesome-icon fas icon="minus-circle"></font-awesome-icon>{{ loginTips }}</div>
+				<div class="tips" v-show="loginTips"><font-awesome-icon fas icon="minus-circle"></font-awesome-icon>{{
+					loginTips }}</div>
 				<form class="login-form">
 					<el-input v-model="form.username" size="large" placeholder="用户名">
 						<template #prefix>
 							<font-awesome-icon fas icon="user"></font-awesome-icon>
 						</template>
 					</el-input>
-					<el-input
-						show-password
-						v-model="form.password"
-						@keydown.enter="login"
-						type="password"
-						size="large"
-						placeholder="登录密码"
-					>
+					<el-input show-password v-model="form.password" @keydown.enter="login" type="password" size="large"
+						placeholder="登录密码">
 						<template #prefix>
 							<font-awesome-icon fas icon="lock"> </font-awesome-icon>
 						</template>
 					</el-input>
+					<div v-show="isRequiredCode" class="code-box">
+						<el-input v-model="form.code" placeholder="验证码" class="ofa-mr10"
+							style="width: 150px;"></el-input>
+						<el-image :src="base64CodeUrl" alt="验证码" class="ofa-mr4"
+							style="width: 120px;height: 50px;"></el-image>
+						<el-button link @click="getVerifyCodeBase64" type="primary"><font-awesome-icon fas icon="refrsh"
+								class="ofa-mr4"></font-awesome-icon>换一个</el-button>
+					</div>
 				</form>
 				<div class="button-box">
 					<el-button round @click="login" type="primary" class="login-button">
@@ -50,7 +53,8 @@
 				<el-link href="https://official.fengwoyun.net/#contact-us" :underline="false"> 联系我们 </el-link>
 				<el-link href="https://official.fengwoyun.net" :underline="false"> 至极科技 </el-link>
 			</div>
-			<div class="copy-right">Copyright &copy; 2019- {{ year }} ZhiJi Technology Co.,Ltd. All Rights Reserved.</div>
+			<div class="copy-right">Copyright &copy; 2019- {{ year }} ZhiJi Technology Co.,Ltd. All Rights Reserved.
+			</div>
 			<div class="copy-box">
 				<el-link :underline="false" href="http://beian.miit.gov.cn">
 					<img src="@/assets/images/copy-right.png" />
@@ -65,6 +69,7 @@
 import { ref, onMounted } from 'vue'
 import router from '@/untils/router'
 import lottie from 'lottie-web'
+import { Md5 } from "ts-md5"
 import lottieJson from '@/assets/lotties/login-lottie.json'
 import API from '@/apis/oauth-api'
 import BASE_API from '@/apis/base-api'
@@ -78,7 +83,10 @@ const lottieContainer = ref() // Lottie元素
 const loginTips = ref('') // 登录提示
 const logining = ref(false) // 正在登陆
 const year = new Date().getFullYear()
-const form = ref({ username: '', password: '', markUsername: false })
+const form = ref({ username: '', password: '', markUsername: false, code: '' })
+const codeKey = ref('') // 生成验证码秘钥
+const base64CodeUrl = ref('') // 简单验证码图片
+const isRequiredCode = ref(false) // 是否需要验证码
 
 onMounted(() => {
 	lottie.loadAnimation({
@@ -114,7 +122,7 @@ function login() {
 		return
 	}
 	logining.value = true
-	API.login(form.value.username, form.value.password)
+	API.login(form.value.username, form.value.password, form.value.code, codeKey.value)
 		.then(res => {
 			// 缓存token
 			tokenStore.clearToken()
@@ -126,10 +134,25 @@ function login() {
 		})
 		.catch(error => {
 			loginTips.value = error.result.Message
+			isRequiredCode.value = error.result.Data?.IsRequiredCaptcha
 		})
 		.finally(() => {
 			logining.value = false
 		})
+}
+
+// 获取验证码 Base64
+function getVerifyCodeBase64() {
+	const timestamp = new Date().getTime()
+	let randomStr = '';
+	const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+	for (let i = 0; i < length; i++) {
+		randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+	codeKey.value = Md5.hashStr(randomStr += '_' + timestamp)
+	API.getVerifyCodeBase64(codeKey.value).then(res => {
+		base64CodeUrl.value = `data:image/png;base64,${res}`
+	})
 }
 </script>
 
@@ -158,6 +181,7 @@ function login() {
 
 	.logo {
 		margin-bottom: 40px;
+
 		img {
 			height: 39px;
 		}
@@ -230,6 +254,7 @@ function login() {
 				}
 			}
 		}
+
 		.button-box {
 			flex: 1;
 			display: flex;
@@ -246,6 +271,18 @@ function login() {
 			border: none;
 			height: 50px;
 			border-radius: 8px;
+		}
+
+		.code-box {
+			display: flex;
+
+			.el-input {
+				margin-bottom: 0;
+			}
+
+			.el-image {
+				border: 1px solid #DCDFE6;
+			}
 		}
 	}
 

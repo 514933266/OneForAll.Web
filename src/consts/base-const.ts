@@ -1,6 +1,3 @@
-// 站内信类型
-export const MESSAGE_TYPE = [{ value: 0, label: '系统通知' }]
-
 // 用户状态
 export const USER_STATUS = [
     { value: 1, label: '正常', type: 'success' },

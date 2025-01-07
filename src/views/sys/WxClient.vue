@@ -4,8 +4,7 @@
       <span> </span>
       <span>
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
-          <font-awesome-icon fas icon="plus"></font-awesome-icon
-          >&nbsp;新增客户端
+          <font-awesome-icon fas icon="plus"></font-awesome-icon>&nbsp;新增客户端
         </el-button>
       </span>
     </el-header>
@@ -19,89 +18,39 @@
         </span>
       </div>
       <el-table v-loading="loading" :data="list" class="ofa-table">
-        <el-table-column
-          prop="ClientName"
-          label="授权登录客户端"
-        ></el-table-column>
+        <el-table-column prop="ClientName" label="授权登录客户端"></el-table-column>
         <el-table-column prop="AppId" label="微信AppId"></el-table-column>
-        <el-table-column
-          prop="AppSecret"
-          label="微信AppSecret"
-        ></el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-          align="center"
-          header-align="center"
-        >
+        <el-table-column prop="AppSecret" label="微信AppSecret"></el-table-column>
+        <el-table-column label="操作" width="200" align="center" header-align="center">
           <template #default="scope">
-            <el-button
-              link
-              v-if="permission.Update"
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Delete"
-              type="danger"
-              @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+            <el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-main>
   </el-container>
   <!-- 表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="460"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '新增' : '编辑' }}客户端</span>
     </template>
-    <el-form
-      status-icon
-      ref="clientForm"
-      :rules="validationRule"
-      :model="entity"
-      label-width="120px"
-    >
+    <el-form status-icon ref="clientForm" :rules="validationRule" :model="entity" label-width="120px">
       <el-form-item label="客户端Id" prop="ClientId">
         <el-select v-model="entity.ClientId" placeholder="所属授权客户端">
-          <el-option
-            v-for="item in clients"
-            :key="item.Id"
-            :label="item.ClientName"
-            :value="item.Id"
-          >
+          <el-option v-for="item in clients" :key="item.Id" :label="item.ClientName" :value="item.Id">
             <span class="float-left">{{ item.ClientName }}</span>
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="客户端名称" prop="ClientName">
-        <el-input
-          v-model.trim="entity.ClientName"
-          placeholder="客户端名称"
-        ></el-input>
+        <el-input v-model.trim="entity.ClientName" placeholder="客户端名称"></el-input>
       </el-form-item>
       <el-form-item label="微信AppId" prop="AppId">
-        <el-input
-          v-model.trim="entity.AppId"
-          placeholder="微信AppId"
-        ></el-input>
+        <el-input v-model.trim="entity.AppId" placeholder="微信AppId"></el-input>
       </el-form-item>
       <el-form-item label="微信AppSecret" prop="AppSecret">
-        <el-input
-          v-model.trim="entity.AppSecret"
-          placeholder="微信AppSecret"
-        ></el-input>
+        <el-input v-model.trim="entity.AppSecret" placeholder="微信AppSecret"></el-input>
       </el-form-item>
     </el-form>
     <div class="footer">
@@ -232,8 +181,19 @@ function del(item: ISysWxClient) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

@@ -2,26 +2,17 @@
   <el-container class="role-page">
     <el-header class="header">
       <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="角色名称"
-          style="width: 260px"
-        >
+        <el-input enterable v-model="searchOption.key" placeholder="角色名称" style="width: 260px" class="ofa-mr10">
           <template #prefix>
             <font-awesome-icon fas icon="user"></font-awesome-icon>
           </template>
         </el-input>
-        <el-button @click="search" type="primary" class="search-button"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-button @click="search" type="primary" class="search-button"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
       <span>
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
-          <font-awesome-icon fas icon="plus"></font-awesome-icon
-          >&nbsp;新增角色</el-button
-        >
+          <font-awesome-icon fas icon="plus"></font-awesome-icon>&nbsp;新增角色</el-button>
       </span>
     </el-header>
     <el-main class="content">
@@ -36,92 +27,42 @@
       <el-table v-loading="loading" :data="list" class="ofa-table">
         <el-table-column prop="Name" label="名称"></el-table-column>
         <el-table-column prop="MemberCount" label="成员人数">
-          <template #default="scope"
-            >{{ scope.row.MemberCount }}&nbsp;（人）</template
-          >
+          <template #default="scope">{{ scope.row.MemberCount }}&nbsp;（人）</template>
         </el-table-column>
         <el-table-column prop="Remark" label="备注"></el-table-column>
-        <el-table-column label="操作" align="center" width="200">
+        <el-table-column label="操作" align="center" width="200" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" @click="toDetailPage(scope.row)"
-              >成员&权限</el-button
-            >
-            <el-button
-              v-if="permission.Update"
-              link
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改
+            <el-button link type="primary" @click="toDetailPage(scope.row)">成员&权限</el-button>
+            <el-button v-if="permission.Update" link type="primary" @click="showDrawer(scope.row)">修改
             </el-button>
-            <el-button
-              v-if="permission.Delete"
-              link
-              type="danger"
-              @click="del(scope.row)"
-            >
-              删除</el-button
-            >
+            <el-button v-if="permission.Delete" link type="danger" @click="del(scope.row)">
+              删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
   <!-- 表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="460"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '创建' : '编辑' }}角色</span>
     </template>
-    <el-form
-      status-icon
-      ref="roleForm"
-      :rules="validationRule"
-      :model="entity"
-      class="form"
-      label-width="80px"
-    >
-      <el-alert
-        title="操作提示"
-        type="warning"
-        style="margin-bottom: 20px"
-        :closable="false"
-        description="创建后对角色分配权限，再将用户加入到该角色中，用户将会拥有对应的操作权限"
-      ></el-alert>
+    <el-form status-icon ref="roleForm" :rules="validationRule" :model="entity" class="form" label-width="80px">
+      <el-alert title="操作提示" type="warning" style="margin-bottom: 20px" :closable="false"
+        description="创建后对角色分配权限，再将用户加入到该角色中，用户将会拥有对应的操作权限"></el-alert>
       <div class="row">
         <el-form-item label="名称" prop="Name">
-          <el-input
-            v-model.trim="entity.Name"
-            placeholder="请输入用户名称"
-          ></el-input>
+          <el-input v-model.trim="entity.Name" placeholder="请输入用户名称"></el-input>
         </el-form-item>
       </div>
       <div class="row">
         <el-form-item label="备注" prop="Remark">
-          <el-input
-            show-word-limit
-            v-model="entity.Remark"
-            type="textarea"
-            maxlength="100"
-            size="small"
-            placeholder="请输入备注"
-          >
+          <el-input show-word-limit v-model="entity.Remark" type="textarea" maxlength="100" size="small"
+            placeholder="请输入备注">
           </el-input>
         </el-form-item>
       </div>
@@ -264,8 +205,19 @@ function toDetailPage(item: ISysTenantRole) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

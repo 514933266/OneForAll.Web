@@ -2,40 +2,26 @@
   <el-container class="website-page">
     <el-header class="header">
       <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="地区名称 / 域名"
-          style="width: 260px"
-        >
+        <el-input enterable v-model="searchOption.key" placeholder="地区名称 / 域名" style="width: 260px">
           <template #prefix>
             <font-awesome-icon fas icon="globe"></font-awesome-icon>
           </template>
         </el-input>
-        <el-cascader
-          clearable
-          v-model="treePath2"
-          :options="treeNodes"
-          placeholder="上级地区"
-          :props="{
-            children: 'Children',
-            value: 'Id',
-            label: 'Name',
-            checkStrictly: true,
-            lazy: true,
-            lazyLoad: getChildren
-          }"
-          class="ofa-ml10"
-        >
+        <el-cascader clearable v-model="treePath2" :options="treeNodes" placeholder="上级地区" :props="{
+          children: 'Children',
+          value: 'Id',
+          label: 'Name',
+          checkStrictly: true,
+          lazy: true,
+          lazyLoad: getChildren
+        }" class="ofa-ml10">
           <template #default="{ data }">
             <label>{{ data.Name }}</label>
             <label v-if="data.ShortName">（{{ data.ShortName }}）</label>
           </template>
         </el-cascader>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-button @click="search" type="primary" class="ofa-ml10"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
       <span>
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
@@ -67,85 +53,36 @@
             getLevelTypeStr(scope.row.Level)
           }}</template>
         </el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-          align="center"
-          header-align="center"
-        >
+        <el-table-column label="操作" width="200" align="center" header-align="center">
           <template #default="scope">
-            <el-button
-              link
-              v-if="permission.Update"
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Delete"
-              type="danger"
-              @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+            <el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
   <!-- 表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="460"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '新增' : '编辑' }}地区</span>
     </template>
-    <el-form
-      status-icon
-      ref="areaForm"
-      :rules="validationRule"
-      :model="entity"
-      class="form"
-      label-width="120px"
-    >
-      <el-alert
-        title="操作提示"
-        type="warning"
-        style="margin-bottom: 20px"
-        :closable="false"
-        description="代码规则为上级代码叠加2位数字，如0101"
-      ></el-alert>
+    <el-form status-icon ref="areaForm" :rules="validationRule" :model="entity" class="form" label-width="120px">
+      <el-alert title="操作提示" type="warning" style="margin-bottom: 20px" :closable="false"
+        description="代码规则为上级代码叠加2位数字，如0101"></el-alert>
       <el-form-item label="上级地区" prop="ParentId" v-if="isAdd">
-        <el-cascader
-          clearable
-          v-model="treePath"
-          :options="rootTree"
-          placeholder="请选择上级地区"
-          :props="{
-            children: 'Children',
-            value: 'Id',
-            label: 'Name',
-            checkStrictly: true,
-            lazy: true,
-            lazyLoad: getChildren
-          }"
-        >
+        <el-cascader clearable v-model="treePath" :options="rootTree" placeholder="请选择上级地区" :props="{
+          children: 'Children',
+          value: 'Id',
+          label: 'Name',
+          checkStrictly: true,
+          lazy: true,
+          lazyLoad: getChildren
+        }">
           <template #default="{ data }">
             <label>{{ data.Name }}</label>
             <label v-if="data.ShortName">（{{ data.ShortName }}）</label>
@@ -153,22 +90,13 @@
         </el-cascader>
       </el-form-item>
       <el-form-item label="名称" prop="Name">
-        <el-input
-          v-model.trim="entity.Name"
-          placeholder="请输入地区名称"
-        ></el-input>
+        <el-input v-model.trim="entity.Name" placeholder="请输入地区名称"></el-input>
       </el-form-item>
       <el-form-item label="代码" prop="Code">
-        <el-input
-          v-model.trim="entity.Code"
-          placeholder="请输入地区代码"
-        ></el-input>
+        <el-input v-model.trim="entity.Code" placeholder="请输入地区代码"></el-input>
       </el-form-item>
       <el-form-item label="简称" prop="ShortName">
-        <el-input
-          v-model.trim="entity.ShortName"
-          placeholder="请输入行政地区的简称，如：粤"
-        ></el-input>
+        <el-input v-model.trim="entity.ShortName" placeholder="请输入行政地区的简称，如：粤"></el-input>
       </el-form-item>
     </el-form>
     <div class="footer">
@@ -373,8 +301,19 @@ function del(item: ISysArea) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

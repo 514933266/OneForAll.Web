@@ -1,18 +1,16 @@
 <template>
   <el-container class="website-api-page">
     <el-header class="header">
-      <span class="ofa-text-title ofa-xl">{{ entity?.Name }}</span>
+      <span></span>
       <span>
         <el-button v-if="permission.Add" @click="showDrawer()" type="primary">
-          <font-awesome-icon fas icon="plus"></font-awesome-icon
-          >&nbsp;新增Api</el-button
-        >
+          <font-awesome-icon fas icon="plus"></font-awesome-icon>&nbsp;新增Api</el-button>
       </span>
     </el-header>
     <el-main class="content">
       <div class="title-box">
         <span class="title">
-          站点Api列表
+          【{{ entity?.Name }}】域名权限列表
           <span class="title-total">
             共有<el-text type="primary">&nbsp;{{ total }}&nbsp;</el-text>条数据
           </span>
@@ -22,57 +20,22 @@
         <el-table-column prop="Name" label="名称"> </el-table-column>
         <el-table-column prop="Code" label="模块代码"> </el-table-column>
         <el-table-column prop="Host" label="请求域名"> </el-table-column>
-        <el-table-column
-          label="操作"
-          width="200"
-          align="center"
-          header-align="center"
-        >
+        <el-table-column label="操作" width="200" align="center" header-align="center">
           <template #default="scope">
-            <el-button
-              link
-              v-if="permission.Update"
-              type="primary"
-              @click="showDrawer(scope.row)"
-              >修改</el-button
-            >
-            <el-button
-              link
-              v-if="permission.Delete"
-              type="danger"
-              @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+            <el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-main>
   </el-container>
   <!-- 表单 -->
-  <el-drawer
-    v-model="drawerVisiable"
-    :modal="false"
-    :show-close="false"
-    direction="rtl"
-    size="460"
-    class="ofa-drawer"
-  >
+  <el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
     <template #header>
       <span class="title">{{ isAdd ? '新增' : '编辑' }}站点Api</span>
     </template>
-    <el-form
-      status-icon
-      ref="apiForm"
-      :rules="validationRule"
-      :model="apiEntity"
-      label-width="120px"
-    >
-      <el-alert
-        show-icon
-        title="操作提示"
-        type="warning"
-        style="margin-bottom: 20px"
-      >
+    <el-form status-icon ref="apiForm" :rules="validationRule" :model="apiEntity" label-width="120px">
+      <el-alert show-icon title="操作提示" type="warning" style="margin-bottom: 20px">
         <ul class="tips">
           <li>本功能仅限开发人员使用，可对租户域名进行授权</li>
           <li>配置后对应的域名将会请求配置的Api地址</li>
@@ -80,20 +43,9 @@
         </ul>
       </el-alert>
       <el-form-item label="Api名称" prop="Name">
-        <el-select
-          filterable
-          remote
-          :model-value="apiEntity.Name"
-          :remote-method="getTreeMenus"
-          @change="selectMenu"
-          placeholder="请输入菜单名称后选择"
-        >
-          <el-option
-            v-for="item in menus"
-            :key="item.Id"
-            :label="item.Name"
-            :value="item.Id"
-          >
+        <el-select filterable remote :model-value="apiEntity.Name" :remote-method="getTreeMenus" @change="selectMenu"
+          placeholder="请输入菜单名称后选择">
+          <el-option v-for="item in menus" :key="item.Id" :label="item.Name" :value="item.Id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -102,10 +54,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="请求域名" prop="Host">
-        <el-input
-          v-model="apiEntity.Host"
-          placeholder="请输入Api域名"
-        ></el-input>
+        <el-input v-model="apiEntity.Host" placeholder="请输入Api域名"></el-input>
       </el-form-item>
     </el-form>
     <div class="footer">
@@ -250,8 +199,19 @@ function del(item: ISysWebsiteApi) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

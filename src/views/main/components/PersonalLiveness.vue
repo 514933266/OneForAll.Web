@@ -182,6 +182,7 @@ onMounted(() => {
 		.title-box {
 			display: flex;
 			align-items: center;
+
 			span {
 				font-size: 18px;
 				font-weight: 500;

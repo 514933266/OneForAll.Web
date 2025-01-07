@@ -2,52 +2,25 @@
   <el-container class="login-log-page">
     <el-header class="header">
       <span>
-        <el-input
-          enterable
-          v-model="searchOption.key"
-          placeholder="关键字"
-          style="width: 200px"
-        >
-          <template #prefix>
-            <font-awesome-icon fas icon="key"></font-awesome-icon>
-          </template>
-        </el-input>
-        <el-date-picker
-          v-model="searchOption.startTime"
-          type="datetime"
-          placeholder="开始日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          style="width: 200px"
-          class="ofa-ml10"
-        >
-        </el-date-picker>
-        <el-date-picker
-          v-model="searchOption.endTime"
-          type="datetime"
-          placeholder="结束日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          style="width: 200px"
-          class="ofa-ml10"
-        >
-        </el-date-picker>
-        <el-input
-          v-model="searchOption.nodeName"
-          placeholder="运行节点"
-          style="width: 200px"
-          class="ofa-ml10"
-        ></el-input>
-        <el-input
-          v-model="searchOption.groupName"
-          placeholder="所属分组"
-          style="width: 200px"
-          class="ofa-ml10"
-        ></el-input>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <span class="search-box">
+          <el-input enterable v-model="searchOption.key" placeholder="关键字" style="width: 200px" class="ofa-mr10">
+            <template #prefix>
+              <font-awesome-icon fas icon="key"></font-awesome-icon>
+            </template>
+          </el-input>
+          <el-input v-model="searchOption.nodeName" placeholder="运行节点" style="width: 200px" class="ofa-mr10"></el-input>
+          <el-input v-model="searchOption.groupName" placeholder="所属分组" style="width: 200px"></el-input>
+        </span>
+        <span class="search-box">
+          <el-date-picker v-model="searchOption.startTime" type="datetime" placeholder="开始日期" format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
+          </el-date-picker>
+          <el-date-picker v-model="searchOption.endTime" type="datetime" placeholder="结束日期" format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
+          </el-date-picker>
+          <el-button @click="search" type="primary"><font-awesome-icon fas
+              icon="search"></font-awesome-icon>&nbsp;查询</el-button>
+        </span>
       </span>
       <span> </span>
     </el-header>
@@ -63,104 +36,37 @@
       <el-table v-loading="loading" :data="list" class="ofa-table">
         <el-table-column prop="Status" label="状态" width="100" align="center">
           <template #default="scope">
-            <el-text :type="getStatusClass(scope.row)"
-              ><font-awesome-icon fas icon="circle"></font-awesome-icon
-            ></el-text>
+            <el-text :type="getStatusClass(scope.row)"><font-awesome-icon fas
+                icon="circle"></font-awesome-icon></el-text>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="Name"
-          label="任务名称"
-          min-width="240"
-        ></el-table-column>
-        <el-table-column
-          prop="Cron"
-          label="表达式"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          prop="GroupName"
-          label="所属分组"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          prop="NodeName"
-          label="运行节点"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          show-overflow-tooltips
-          prop="Remark"
-          label="备注"
-          min-width="400"
-        ></el-table-column>
-        <el-table-column
-          prop="UpdateTime"
-          label="最后修改时间"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          prop="RunningTime"
-          label="最后运行时间"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          prop="HeartbeatTime"
-          label="心跳时间"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          label="操作"
-          width="280"
-          align="center"
-          header-align="center"
-          fixed="right"
-        >
+        <el-table-column prop="Name" label="任务名称" width="300"></el-table-column>
+        <el-table-column prop="Cron" label="表达式" width="200"></el-table-column>
+        <el-table-column prop="GroupName" label="所属分组" width="200"></el-table-column>
+        <el-table-column prop="NodeName" label="运行节点" width="300"></el-table-column>
+        <el-table-column show-overflow-tooltips prop="Remark" label="备注" min-width="400"></el-table-column>
+        <el-table-column prop="UpdateTime" label="最后修改时间" width="200"></el-table-column>
+        <el-table-column prop="RunningTime" label="最后运行时间" width="200"></el-table-column>
+        <el-table-column prop="HeartbeatTime" label="心跳时间" width="200"></el-table-column>
+        <el-table-column label="操作" width="280" align="center" header-align="center" fixed="right">
           <template #default="scope">
-            <el-button link type="primary" @click="toLogPage(scope.row)"
-              >查看日志</el-button
-            >
-            <el-button link type="primary" @click="excute(scope.row)"
-              >执行一次</el-button
-            >
+            <el-button link type="primary" @click="toLogPage(scope.row)">查看日志</el-button>
+            <el-button link type="primary" @click="excute(scope.row)">执行一次</el-button>
             <el-button link type="warning">设置负责人</el-button>
-            <el-button
-              link
-              :type="scope.row.IsEnabled ? 'danger' : 'success'"
-              @click="enable(scope.row)"
-            >
+            <el-button link :type="scope.row.IsEnabled ? 'danger' : 'success'" @click="enable(scope.row)">
               {{ scope.row.IsEnabled ? '禁用' : '启用' }}
             </el-button>
-            <el-button
-              link
-              type="success"
-              v-show="scope.row.Status === 0"
-              @click="changeStaus(scope.row, 1)"
-              >启动</el-button
-            >
-            <el-button
-              link
-              type="warning"
-              v-show="scope.row.Status === 1"
-              @click="changeStaus(scope.row, 0)"
-              >暂停</el-button
-            >
-            <el-button link type="danger" @click="del(scope.row)"
-              >删除</el-button
-            >
+            <el-button link type="success" v-show="scope.row.Status === 0"
+              @click="changeStaus(scope.row, 1)">启动</el-button>
+            <el-button link type="warning" v-show="scope.row.Status === 1"
+              @click="changeStaus(scope.row, 0)">暂停</el-button>
+            <el-button link type="danger" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
@@ -287,8 +193,19 @@ function toLogPage(data: IJobTask) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

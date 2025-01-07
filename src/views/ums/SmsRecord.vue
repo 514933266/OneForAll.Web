@@ -1,36 +1,17 @@
 <template>
   <el-container class="login-log-page">
     <el-header class="header">
-      <span>
-        <el-date-picker
-          v-model="searchOption.startTime"
-          type="datetime"
-          placeholder="开始日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          style="width: 200px"
-        >
+      <span class="search-box">
+        <el-date-picker v-model="searchOption.startTime" type="datetime" placeholder="开始日期" format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
         </el-date-picker>
-        <el-date-picker
-          v-model="searchOption.endTime"
-          type="datetime"
-          placeholder="结束日期"
-          format="YYYY-MM-DD"
-          value-format="YYYY-MM-DD"
-          style="width: 200px"
-          class="ofa-ml10"
-        >
+        <el-date-picker v-model="searchOption.endTime" type="datetime" placeholder="结束日期" format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
         </el-date-picker>
-        <el-input
-          v-model="searchOption.platformName"
-          placeholder="平台名称"
-          style="width: 200px"
-          class="ofa-ml10"
-        ></el-input>
-        <el-button @click="search" type="primary" class="ofa-ml10"
-          ><font-awesome-icon fas icon="search"></font-awesome-icon
-          >&nbsp;查询</el-button
-        >
+        <el-input v-model="searchOption.platformName" placeholder="平台名称" style="width: 200px"
+          class="ofa-mr10"></el-input>
+        <el-button @click="search" type="primary"><font-awesome-icon fas
+            icon="search"></font-awesome-icon>&nbsp;查询</el-button>
       </span>
       <span> </span>
     </el-header>
@@ -46,21 +27,9 @@
       <el-table v-loading="loading" :data="list" class="ofa-table">
         <el-table-column prop="PlatformName" label="短信平台"></el-table-column>
         <el-table-column prop="PhoneNumber" label="手机号码"></el-table-column>
-        <el-table-column
-          prop="NationCode"
-          label="国家（或地区）码"
-          width="200"
-        ></el-table-column>
-        <el-table-column
-          show-overflow-tooltip
-          prop="Content"
-          label="原始消息"
-        ></el-table-column>
-        <el-table-column
-          prop="CreateTime"
-          label="发送时间"
-          width="200"
-        ></el-table-column>
+        <el-table-column prop="NationCode" label="国家（或地区）码" width="200"></el-table-column>
+        <el-table-column show-overflow-tooltip prop="Content" label="原始消息"></el-table-column>
+        <el-table-column prop="CreateTime" label="发送时间" width="200"></el-table-column>
         <el-table-column prop="ErrMsg" label="发送结果">
           <template #default="scope">
             <el-text v-if="scope.row.Status === 1" type="success">{{
@@ -73,16 +42,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        v-model:current-page="pageIndex"
-        :page-sizes="[10, 20, 50, 100]"
-        v-model:page-size="pageSize"
-        :total="total"
-        @size-change="pageSizeChange"
-        @current-change="pageIndexChange"
-      >
+      <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+        :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+        @current-change="pageIndexChange">
       </el-pagination>
     </el-main>
   </el-container>
@@ -153,8 +115,19 @@ function pageIndexChange(value: number) {
   .header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
+    height: auto;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      padding: 6px 4px;
+    }
+
+    .button-box {
+      display: flex;
+      align-items: flex-start;
+    }
   }
 
   .title-box {

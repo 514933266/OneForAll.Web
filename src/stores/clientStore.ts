@@ -10,7 +10,8 @@ const SYS_LOG = 'OneForAll.SysLog'
 const SYS = 'OneForAll.Sys'
 const UMS = 'OneForAll.Ums'
 const JOB = 'OneForAll.ScheduleJob'
-const CHAT = 'OneForAll.Api.ChatGPT'
+const CHAT = 'OneForAll.ChatGPT'
+const OMS = 'OneForAll.Oms'
 
 export const useClientStore = defineStore('clientStore', () => {
 	const client = ref<ISysWebsite>()
@@ -28,6 +29,8 @@ export const useClientStore = defineStore('clientStore', () => {
 	const jobApi = computed(() => getApi(JOB))
 	// chatgpt服务api
 	const chatApi = computed(() => getApi(CHAT))
+	// 商户中心服务api
+	const omsApi = computed(() => getApi(OMS))
 	// 更新客户端数据
 	function setClient(data: ISysWebsite) {
 		client.value = data
@@ -51,5 +54,5 @@ export const useClientStore = defineStore('clientStore', () => {
 		localStorage.removeItem(CACHE_NAME)
 	}
 
-	return { client, baseApi, oaApi, syslogApi, sysApi, umsApi, jobApi, chatApi, setClient, getApi, clearClient }
+	return { client, baseApi, oaApi, syslogApi, sysApi, umsApi, jobApi, chatApi, omsApi, setClient, getApi, clearClient }
 })

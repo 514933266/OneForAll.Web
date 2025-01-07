@@ -2,54 +2,25 @@
   <el-container class="message-center-page">
     <el-main>
       <el-tabs v-model="activeName" @tab-change="tabChange" type="card">
-        <el-tab-pane
-          v-for="tab in tabs"
-          :key="tab.value"
-          :name="tab.value"
-          :label="tab.label"
-        >
+        <el-tab-pane v-for="tab in tabs" :key="tab.value" :name="tab.value" :label="tab.label">
           <template #label>
-            {{ tab.label }}&nbsp;<el-tag
-              v-if="tab.value === 0 && totalUnRead > 0"
-              type="danger"
-              >{{ totalUnRead }}</el-tag
-            >
+            {{ tab.label }}&nbsp;<el-tag v-if="tab.value === 0 && totalUnRead > 0" type="danger">{{ totalUnRead
+              }}</el-tag>
           </template>
-          <el-table
-            v-loading="loading"
-            :data="list"
-            @selection-change="selectionChange"
-            class="ofa-table"
-          >
+          <el-table v-loading="loading" :data="list" @selection-change="selectionChange" class="ofa-table">
             <el-table-column width="50">
               <template #default="scope">{{
                 scope.$index + 1 + (pageIndex - 1) * pageSize
               }}</template>
             </el-table-column>
-            <el-table-column
-              type="selection"
-              width="55"
-              align="center"
-              header-align="center"
-            ></el-table-column>
+            <el-table-column type="selection" width="55" align="center" header-align="center"></el-table-column>
             <el-table-column prop="Title" label="标题">
               <template #default="scope">
                 <label>{{ scope.row.Title }}</label>
-                <el-tag
-                  v-if="!scope.row.IsRead"
-                  round
-                  type="danger"
-                  effect="dark"
-                  class="ofa-ml10"
-                  >未读</el-tag
-                >
+                <el-tag v-if="!scope.row.IsRead" round type="danger" effect="dark" class="ofa-ml10">未读</el-tag>
               </template>
             </el-table-column>
-            <el-table-column
-              show-overflow-tooltip
-              prop="Content"
-              label="内容"
-            ></el-table-column>
+            <el-table-column show-overflow-tooltip prop="Content" label="内容"></el-table-column>
             <el-table-column label="日期" width="200">
               <template #default="scope">{{
                 dayjs(scope.row.CreateTime).format('YYYY年MM月DD日 HH:mm')
@@ -60,32 +31,18 @@
                 getTypeStr(scope.row.Type)
               }}</template>
             </el-table-column>
-            <el-table-column
-              label="操作"
-              width="160"
-              align="center"
-              header-align="center"
-            >
+            <el-table-column label="操作" width="160" align="center" header-align="center">
               <template #default="scope">
-                <el-button link type="primary" @click="toDetailtPage(scope.row)"
-                  >查看详情</el-button
-                >
+                <el-button link type="primary" @click="toDetailtPage(scope.row)">查看详情</el-button>
               </template>
             </el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
       <div class="bottom">
-        <el-pagination
-          background
-          layout="total, sizes, prev, pager, next, jumper"
-          v-model:current-page="pageIndex"
-          :page-sizes="[10, 20, 50, 100]"
-          v-model:page-size="pageSize"
-          :total="total"
-          @size-change="pageSizeChange"
-          @current-change="pageIndexChange"
-        >
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+          :page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total" @size-change="pageSizeChange"
+          @current-change="pageIndexChange">
         </el-pagination>
         <div>
           <el-button @click="del" type="danger">删除</el-button>
@@ -101,9 +58,9 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { dayjs, ElMessage } from 'element-plus'
-import API from '@/apis/base-api'
-import { ISysMessage } from '@/interfaces/base/ISysMessage'
-import { MESSAGE_TYPE } from '@/consts/base-const'
+import API from '@/apis/ums-api'
+import { ISysMessage } from '@/interfaces/ums/ISysMessage'
+import { MESSAGE_TYPE } from '@/consts/ums-const'
 import { useBrowserStore } from '@/stores/browserStore'
 import { MESSAGE_CENTER_DETAIL } from '@/routers/main-router'
 

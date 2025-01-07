@@ -1,7 +1,7 @@
 <template>
   <el-container class="role-detail-page">
     <el-main class="tab-container">
-      <div class="ofa-text-title ofa-xl">{{ `${entity?.Name}` }}</div>
+      <div class="title">【{{ `${entity?.Name}` }}】权限配置</div>
       <el-tabs v-model="activeName">
         <el-tab-pane label="全部权限" name="permTab">
           <div class="perm-box">
@@ -12,12 +12,7 @@
               </ul>
             </el-alert>
             <div class="button-box">
-              <el-button
-                v-if="permission.Update"
-                @click="bindPermission"
-                type="primary"
-                >保存权限</el-button
-              >
+              <el-button v-if="permission.Update" @click="bindPermission" type="primary">保存权限</el-button>
             </div>
             <PermissionTable v-model="selectionList"></PermissionTable>
           </div>
@@ -76,6 +71,12 @@ function bindPermission() {
   padding: 20px;
   background-color: #fff;
   border-radius: 20px;
+
+  .title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
 }
 
 .header {

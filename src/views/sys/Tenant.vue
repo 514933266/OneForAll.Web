@@ -1,40 +1,29 @@
 <template>
 	<el-container class="tenant-page">
 		<el-header class="header">
-			<span class="search-box">
-				<el-select v-model="searchOption.isEnabled" style="width: 260px">
-					<el-option :value="-1" label="全部"></el-option>
-					<el-option :value="1" label="启用"></el-option>
-					<el-option :value="0" label="禁用"></el-option>
-				</el-select>
-				<el-input v-model="searchOption.key" placeholder="请根据选择的类型输入关键字" class="ofa-ml10" style="width: 260px">
-				</el-input>
-				<el-date-picker
-					v-model="searchOption.startDate"
-					type="date"
-					class="ofa-ml10"
-					style="width: 260px"
-					placeholder="请选择注册开始日期"
-					format="yyyy年MM月dd日"
-					value-format="YYYY-MM-DD"
-				>
-				</el-date-picker>
-				<el-date-picker
-					v-model="searchOption.endDate"
-					type="date"
-					class="ofa-ml10"
-					placeholder="请选择注册结束日期"
-					format="yyyy年MM月dd日"
-					value-format="YYYY-MM-DD"
-					style="margin-right: 4px; width: 260px"
-				>
-				</el-date-picker>
-				<el-button @click="search" type="primary" class="ofa-ml10"
-					><font-awesome-icon fas icon="search"></font-awesome-icon>&nbsp;查询</el-button
-				>
-			</span>
 			<span>
-				<el-button v-if="permission.Add" @click="showDrawer()" type="primary">
+				<span class="search-box">
+					<el-select v-model="searchOption.isEnabled" style="width: 100px" class="ofa-mr10">
+						<el-option :value="-1" label="全部"></el-option>
+						<el-option :value="1" label="启用"></el-option>
+						<el-option :value="0" label="禁用"></el-option>
+					</el-select>
+					<el-input v-model="searchOption.key" placeholder="请根据选择的类型输入关键字" style="width: 260px">
+					</el-input>
+				</span>
+				<span class="search-box">
+					<el-date-picker v-model="searchOption.startDate" type="date" style="width: 260px"
+						placeholder="请选择注册开始日期" format="yyyy年MM月dd日" value-format="YYYY-MM-DD" class="ofa-mr10">
+					</el-date-picker>
+					<el-date-picker v-model="searchOption.endDate" type="date" class="ofa-mr10" placeholder="请选择注册结束日期"
+						format="yyyy年MM月dd日" value-format="YYYY-MM-DD" style="margin-right: 4px; width: 260px">
+					</el-date-picker>
+					<el-button @click="search" type="primary" class="ofa-mr10"><font-awesome-icon fas
+							icon="search"></font-awesome-icon>&nbsp;查询</el-button>
+				</span>
+			</span>
+			<span v-if="permission.Add" class="button-box">
+				<el-button @click="showDrawer()" type="primary">
 					<font-awesome-icon fas icon="plus"></font-awesome-icon>&nbsp;新增租户
 				</el-button>
 			</span>
@@ -49,41 +38,37 @@
 				</span>
 			</div>
 			<el-table v-loading="loading" :data="list" class="ofa-table">
-				<el-table-column prop="Name" label="企业名称" min-width="250px"></el-table-column>
-				<el-table-column prop="Code" label="机构代码" min-width="200px"></el-table-column>
-				<el-table-column prop="Manager" label="联系人"></el-table-column>
-				<el-table-column prop="Phone" label="联系方式"></el-table-column>
+				<el-table-column prop="Name" label="企业名称" width="300"></el-table-column>
+				<el-table-column prop="Code" label="机构代码" width="200"></el-table-column>
+				<el-table-column prop="Manager" label="联系人" width="200"></el-table-column>
+				<el-table-column prop="Phone" label="联系方式" width="200"></el-table-column>
 				<el-table-column label="注册日期" width="150" align="center">
 					<template #default="scope">{{ dayjs(scope.row.CreateTime).format('YYYY年MM月DD日') }}</template>
 				</el-table-column>
 				<el-table-column label="状态" prop="IsEnabled" align="center" header-align="center" width="100">
 					<template #default="scope">
-						<el-tag :type="scope.row.IsEnabled ? 'success' : 'danger'">{{ scope.row.IsEnabled ? '合作中' : '已停用' }}</el-tag>
+						<el-tag :type="scope.row.IsEnabled ? 'success' : 'danger'">{{ scope.row.IsEnabled ? '合作中' :
+							'已停用' }}</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column label="操作" width="200" align="center" header-align="center">
+				<el-table-column label="操作" width="200" align="center" header-align="center" fixed="right">
 					<template #default="scope">
 						<el-button link type="primary" @click="toPermissionPage(scope.row)">权限</el-button>
-						<el-button link v-if="permission.Update" type="primary" @click="showDrawer(scope.row)">修改</el-button>
+						<el-button link v-if="permission.Update" type="primary"
+							@click="showDrawer(scope.row)">修改</el-button>
 						<el-button link v-if="permission.Delete" type="danger" @click="del(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
-				background
-				layout="total, sizes, prev, pager, next, jumper"
-				v-model:current-page="pageIndex"
-				:page-sizes="[10, 20, 50, 100]"
-				v-model:page-size="pageSize"
-				:total="total"
-				@size-change="pageSizeChange"
-				@current-change="pageIndexChange"
-			>
+			<el-pagination background layout="total, sizes, prev, pager, next, jumper" v-model:current-page="pageIndex"
+				:page-sizes="[10, 20, 50, 100]" v-model:page-size="pageSize" :total="total"
+				@size-change="pageSizeChange" @current-change="pageIndexChange">
 			</el-pagination>
 		</el-main>
 	</el-container>
 	<!-- 表单 -->
-	<el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460" class="ofa-drawer">
+	<el-drawer v-model="drawerVisiable" :modal="false" :show-close="false" direction="rtl" size="460"
+		class="ofa-drawer">
 		<template #header>
 			<span class="title">{{ isAdd ? '新增' : '编辑' }}租户</span>
 		</template>
@@ -112,12 +97,8 @@
 				<el-input class="address-textarea" placeholder="请输入具体地址，详细到门牌号" v-model="entity.Address"></el-input>
 			</el-form-item>
 			<el-form-item label="描述" prop="Description" class="description-item">
-				<el-input
-					type="textarea"
-					class="description-textarea"
-					placeholder="请输入企业简要介绍"
-					v-model="entity.Description"
-				></el-input>
+				<el-input type="textarea" class="description-textarea" placeholder="请输入企业简要介绍"
+					v-model="entity.Description"></el-input>
 			</el-form-item>
 		</el-form>
 		<div class="footer">
@@ -259,12 +240,18 @@ function toPermissionPage(item: ISysTenant) {
 	.header {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
 		flex-wrap: wrap;
+		height: auto;
 
 		.search-box {
 			display: flex;
-			padding: 10px 0;
+			align-items: center;
+			padding: 6px 4px;
+		}
+
+		.button-box {
+			display: flex;
+			align-items: flex-start;
 		}
 	}
 

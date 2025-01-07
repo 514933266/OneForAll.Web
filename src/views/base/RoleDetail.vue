@@ -1,7 +1,7 @@
 <template>
   <el-container class="role-detail-page">
     <el-main class="tab-container">
-      <div class="title">{{ `${entity?.Name}` }}</div>
+      <div class="title">【{{ `${entity?.Name}` }}】权限配置</div>
       <el-tabs v-model="activeName">
         <el-tab-pane label="全部权限" name="permTab">
           <div class="perm-box">
@@ -13,12 +13,7 @@
               </ul>
             </el-alert>
             <div class="button-box">
-              <el-button
-                v-if="permission.Update"
-                @click="bindPermission"
-                type="primary"
-                >保存权限</el-button
-              >
+              <el-button v-if="permission.Update" @click="bindPermission" type="primary">保存权限</el-button>
             </div>
             <PermissionTable v-model="selectionList"></PermissionTable>
           </div>
@@ -26,20 +21,9 @@
         <el-tab-pane label="角色用户" name="userTab">
           <div class="role-member-box">
             <div class="header">
-              <el-select
-                multiple
-                filterable
-                v-model="memberIds"
-                placeholder="在此处搜索要加入角色的账号"
-                style="width: 400px"
-              >
-                <el-option
-                  v-for="item in users"
-                  :key="item.Id"
-                  :label="item.Name"
-                  :value="item.Id"
-                  style="height: 60px"
-                >
+              <el-select multiple filterable v-model="memberIds" placeholder="在此处搜索要加入角色的账号" style="width: 400px">
+                <el-option v-for="item in users" :key="item.Id" :label="item.Name" :value="item.Id"
+                  style="height: 60px">
                   <div class="user-icon">
                     <el-avatar :src="domain + item.IconUrl">{{
                       getSubName(item.Name)
@@ -48,13 +32,8 @@
                   </div>
                 </el-option>
               </el-select>
-              <el-button
-                v-if="permission.Update"
-                @click="addMember"
-                type="primary"
-                class="submit-button"
-                >添加选中成员到角色</el-button
-              >
+              <el-button v-if="permission.Update" @click="addMember" type="primary"
+                class="submit-button">添加选中成员到角色</el-button>
             </div>
             <el-table border :data="members" class="member-table">
               <el-table-column prop="Name" label="名称">
@@ -70,36 +49,18 @@
               <el-table-column prop="UserName" label="账号"></el-table-column>
               <el-table-column prop="IsDefault" label="账号类型" width="100">
                 <template #default="scope">
-                  <el-tag
-                    :type="scope.row.IsDefault === true ? 'danger' : 'info'"
-                  >
-                    {{ scope.row.IsDefault ? '管理员' : '普通账号' }}</el-tag
-                  >
+                  <el-tag :type="scope.row.IsDefault === true ? 'danger' : 'info'">
+                    {{ scope.row.IsDefault ? '管理员' : '普通账号' }}</el-tag>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="LastLoginTime"
-                label="最后登录时间"
-                width="160"
-              >
+              <el-table-column prop="LastLoginTime" label="最后登录时间" width="160">
                 <template #default="scope">{{
                   scope.row.LastLoginTime ? scope.row.LastLoginTime : '未登录'
                 }}</template>
               </el-table-column>
-              <el-table-column
-                label="操作"
-                width="100"
-                align="center"
-                header-align="center"
-              >
+              <el-table-column label="操作" width="100" align="center" header-align="center">
                 <template #default="scope">
-                  <el-button
-                    v-if="permission.Delete"
-                    link
-                    type="danger"
-                    @click="delMember(scope.row)"
-                    >移除</el-button
-                  >
+                  <el-button v-if="permission.Delete" link type="danger" @click="delMember(scope.row)">移除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -219,6 +180,7 @@ function delMember(item: ISysRoleMember) {
   background-color: #fff;
   border-radius: 20px;
 }
+
 .header {
   display: flex;
   align-items: center;
@@ -232,6 +194,7 @@ function delMember(item: ISysRoleMember) {
     font-size: 18px;
     margin-bottom: 10px;
   }
+
   :deep(.el-tabs__item) {
     font-size: 1rem !important;
     padding: 10px 20px !important;

@@ -1,3 +1,7 @@
+// 站内信类型
+export const MESSAGE_TYPE = [{ value: 0, label: '系统通知' }]
+
+// mq消息状态
 export const MESAGE_LOG_STATUS: Array<{ value: number; label: string; type: 'info' | 'danger' | 'success' | 'warning' }> = [
 	{ value: 0, label: '发送失败', type: 'danger' },
 	{ value: 1, label: '发送成功', type: 'success' },
