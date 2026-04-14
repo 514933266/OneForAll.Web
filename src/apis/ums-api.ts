@@ -4,6 +4,7 @@ import { IBaseMessage } from '../interfaces/IBaseMessage'
 import { useClientStore } from '../stores/clientStore'
 import { IUmsMessageRecord } from '../interfaces/ums/IUmsMessageRecord'
 import { IUmsSmsRecord } from '../interfaces/ums/IUmsSmsRecord'
+import { IUmsNotificationConfig } from '../interfaces/ums/IUmsNotificationConfig'
 import { ISysMessage } from '../interfaces/ums/ISysMessage'
 
 const useClient = useClientStore()
@@ -81,6 +82,30 @@ const API = {
 				platformName: platformName
 			}
 		})
+	},
+	// 获取消息通知配置分页列表
+	getNotificationConfigs(
+		pageIndex: number,
+		pageSize: number,
+		clientId?: string
+	): Promise<IBasePage<IUmsNotificationConfig>> {
+		const url = `${useClient.umsApi}/api/UmsNotificationConfigs/${pageIndex}/${pageSize}`
+		return axios.get(url, { params: { clientId: clientId } })
+	},
+	// 添加消息通知配置
+	addNotificationConfig(data: any): Promise<IBaseMessage> {
+		const url = `${useClient.umsApi}/api/UmsNotificationConfigs`
+		return axios.post(url, data)
+	},
+	// 修改消息通知配置
+	updateNotificationConfig(id: string, data: any): Promise<IBaseMessage> {
+		const url = `${useClient.umsApi}/api/UmsNotificationConfigs/${id}`
+		return axios.put(url, data)
+	},
+	// 删除消息通知配置
+	deleteNotificationConfig(id: string): Promise<IBaseMessage> {
+		const url = `${useClient.umsApi}/api/UmsNotificationConfigs/${id}`
+		return axios.delete(url)
 	}
 }
 

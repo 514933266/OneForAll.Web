@@ -1,6 +1,15 @@
 // 站内信类型
 export const MESSAGE_TYPE = [{ value: 0, label: '系统通知' }]
 
+// 消息通知类型
+export const NOTIFICATION_TYPE = [
+	{ value: 0, label: '默认' },
+	{ value: 1, label: '链接' },
+	{ value: 2, label: '企业微信机器人' },
+	{ value: 3, label: '钉钉机器人' },
+	{ value: 4, label: '邮件通知' }
+]
+
 // mq消息状态
 export const MESAGE_LOG_STATUS: Array<{ value: number; label: string; type: 'info' | 'danger' | 'success' | 'warning' }> = [
 	{ value: 0, label: '发送失败', type: 'danger' },
