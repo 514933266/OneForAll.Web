@@ -13,32 +13,32 @@ const useClient = useClientStore()
 const API = {
 	// 获取站内信
 	getTopMessages(top?: number): Promise<ISysMessage[]> {
-		const url = `${useClient.umsApi}/api/SysPersonalMessages/${top ?? 10}`
+		const url = `${useClient.umsApi}/api/UmsPersonalMessages/${top ?? 10}`
 		return axios.get(url)
 	},
 	// 获取站内信
 	getMessages(day?: number): Promise<ISysMessage[]> {
-		const url = `${useClient.umsApi}/api/SysPersonalMessages/${day ?? 3}/UnReads`
+		const url = `${useClient.umsApi}/api/UmsPersonalMessages/${day ?? 3}/UnReads`
 		return axios.get(url)
 	},
 	// 获取站内信分页
 	getPageMessage(pageIndex: number, pageSize: number, status: number, key?: string): Promise<IBasePage<ISysMessage>> {
-		const url = `${useClient.umsApi}/api/SysPersonalMessages/${pageIndex}/${pageSize}`
+		const url = `${useClient.umsApi}/api/UmsPersonalMessages/${pageIndex}/${pageSize}`
 		return axios.get(url, { params: { key: key, status: status } })
 	},
 	// 获取未读消息数量
 	getMessageCount(): Promise<number> {
-		const url = `${useClient.umsApi}/api/SysPersonalMessages/UnReadCount`
+		const url = `${useClient.umsApi}/api/UmsPersonalMessages/UnReadCount`
 		return axios.get(url)
 	},
 	// 设置消息已读
 	readMessage(ids: string[], isQuiet?: boolean): Promise<IBaseMessage> {
-		const url = `${useClient.umsApi}/api/SysPersonalMessages/Batch/IsRead?isQuiet=${isQuiet}`
+		const url = `${useClient.umsApi}/api/UmsPersonalMessages/Batch/IsRead?isQuiet=${isQuiet}`
 		return axios.patch(url, ids)
 	},
 	// 清空消息
 	deleteMessage(ids: string[]): Promise<IBaseMessage> {
-		const url = `${useClient.umsApi}/api/SysPersonalMessages/Batch/IsDeleted`
+		const url = `${useClient.umsApi}/api/UmsPersonalMessages/Batch/IsDeleted`
 		return axios.patch(url, ids)
 	},
 	// 获取消息队列日志列表
