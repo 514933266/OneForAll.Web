@@ -9,7 +9,8 @@
             </template>
           </el-input>
           <el-input v-model="searchOption.nodeName" placeholder="运行节点" style="width: 200px" class="ofa-mr10"></el-input>
-          <el-input v-model="searchOption.groupName" placeholder="所属分组" style="width: 200px"></el-input>
+          <el-input v-model="searchOption.groupName" placeholder="所属分组" style="width: 200px" class="ofa-mr10"></el-input>
+          <el-input v-model="searchOption.appId" placeholder="应用程序Id" style="width: 200px"></el-input>
         </span>
         <span class="search-box">
           <el-date-picker v-model="searchOption.startTime" type="datetime" placeholder="开始日期" format="YYYY-MM-DD"
@@ -41,6 +42,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="Name" label="任务名称" width="300"></el-table-column>
+        <el-table-column prop="AppId" label="应用程序" width="200"></el-table-column>
         <el-table-column prop="Cron" label="表达式" width="200"></el-table-column>
         <el-table-column prop="GroupName" label="所属分组" width="200"></el-table-column>
         <el-table-column prop="NodeName" label="运行节点" width="300"></el-table-column>
@@ -91,6 +93,7 @@ const searchOption = ref({
   endTime: '', // 结束日期
   nodeName: '', // 运行节点
   groupName: '', // 所属分组
+  appId: '', // 应用程序Id
   key: '' // 关键字
 }) // 搜索条件
 
@@ -104,9 +107,10 @@ function get() {
   API.getTasks(
     pageIndex.value,
     pageSize.value,
-    searchOption.value.nodeName,
     searchOption.value.groupName,
-    searchOption.value.key
+    searchOption.value.nodeName,
+    searchOption.value.key,
+    searchOption.value.appId
   ).then(res => {
     total.value = res.Total
     list.value = res.Items
@@ -178,9 +182,9 @@ function del(data: IJobTask) {
   })
 }
 
-// 跳转日志页
+// 跳转日志页（携带当前任务的应用程序id与任务名称，日志页按条件查询）
 function toLogPage(data: IJobTask) {
-  browserStore.navigate(TASK_LOG, data)
+  browserStore.navigate(TASK_LOG, undefined, { appId: data.AppId, taskName: data.Name })
 }
 </script>
 

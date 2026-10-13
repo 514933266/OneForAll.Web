@@ -8,11 +8,11 @@
               <font-awesome-icon fas icon="key"></font-awesome-icon>
             </template>
           </el-input>
-          <el-date-picker v-model="searchOption.startTime" type="datetime" placeholder="开始日期" format="YYYY-MM-DD"
-            value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
+          <el-date-picker v-model="searchOption.startTime" type="datetime" placeholder="开始时间" format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss" style="width: 220px" class="ofa-mr10">
           </el-date-picker>
-          <el-date-picker v-model="searchOption.endTime" type="datetime" placeholder="结束日期" format="YYYY-MM-DD"
-            value-format="YYYY-MM-DD" style="width: 200px" class="ofa-mr10">
+          <el-date-picker v-model="searchOption.endTime" type="datetime" placeholder="结束时间" format="YYYY-MM-DD HH:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss" style="width: 220px" class="ofa-mr10">
           </el-date-picker>
         </span>
         <span class="search-box">
@@ -62,36 +62,52 @@
 
 <script setup lang="ts">
 import { ref, nextTick, onMounted, onActivated } from 'vue'
+import { useRoute } from 'vue-router'
 import { IJobTaskLog } from '@/interfaces/job/IJobTaskLog'
 import API from '@/apis/job-api.ts'
 import { TASK_LOG_TYPE } from '@/consts/job-const'
 
+const route = useRoute() // 路由（任务列表跳转携带查询条件）
 const loading = ref(false) // 加载中
 const total = ref(0) // 总数据量
 const pageIndex = ref(1) // 页码
 const pageSize = ref(10) // 页数
 const list = ref<IJobTaskLog[]>([]) // 用户列表
 const searchOption = ref({
-  startTime: '', // 开始日期
-  endTime: '', // 结束日期
+  startTime: '', // 开始时间
+  endTime: '', // 结束时间
   appId: '', // 应用程序Id
   taskName: '', // 任务名称
   type: -1, // 日志类型
   key: ''
 }) // 搜索条件
 
+let firstActivated = true // 首次激活的加载由 onMounted 完成，避免重复请求
+
 onMounted(() => {
+  applyRouteQuery()
   get()
 })
 
 onActivated(() => {
-  const data = history.state.params
-  if (data != null && data.AppId) {
-    searchOption.value.appId = data.AppId
-    searchOption.value.taskName = data.Name
+  if (firstActivated) {
+    firstActivated = false
+    return
   }
+  applyRouteQuery()
   get()
 })
+
+// 应用任务列表跳转携带的条件（优先 query，兼容 params 传参）
+function applyRouteQuery() {
+  const params = history.state?.params
+  const appId = (route.query.appId as string) || params?.AppId || ''
+  const taskName = (route.query.taskName as string) || params?.Name || ''
+  if (!appId) return
+  searchOption.value.appId = appId
+  searchOption.value.taskName = taskName
+  pageIndex.value = 1
+}
 
 // 获取列表
 function get() {

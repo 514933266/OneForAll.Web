@@ -10,13 +10,14 @@ const useClient = useClientStore()
 // 消息服务
 const API = {
 	// 获取定时任务列表
-	getTasks(pageIndex: number, pageSize: number, groupName?: string, nodeName?: string, key?: string): Promise<IBasePage<IJobTask>> {
+	getTasks(pageIndex: number, pageSize: number, groupName?: string, nodeName?: string, key?: string, appId?: string): Promise<IBasePage<IJobTask>> {
 		const url = `${useClient.jobApi}/api/JobTasks/${pageIndex}/${pageSize}`
 		return axios.get(url, {
 			params: {
 				groupName: groupName,
 				nodeName: nodeName,
-				key: key
+				key: key,
+				appId: appId
 			}
 		})
 	},
