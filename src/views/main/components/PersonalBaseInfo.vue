@@ -110,7 +110,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { dayjs, ElMessageBox } from 'element-plus'
+import { dayjs, ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/stores/userStore'
 import { useTokenStore } from '@/stores/tokenStore'
 import { useBrowserStore } from '@/stores/browserStore'
@@ -163,9 +163,9 @@ const teamName = computed(() => {
 	return ''
 }) // 直属团队
 
-// 上传token
+// 上传token（原生上传不走 axios，需手动带 Bearer 前缀）
 const uploadHeaders = computed(() => {
-	return { Authorization: `${tokenStore.bearToken}` }
+	return { Authorization: `Bearer ${tokenStore.bearToken}` }
 })
 
 // 更改个性签名
@@ -179,9 +179,13 @@ function updateSignature() {
 	})
 }
 
-// 只能上传小于2M图片
+// 只能上传小于500KB图片（与服务端限制一致）
 function beforeUpload(file: File) {
-	return file.size < 1024 * 1024 * 2
+	if (file.size > 500 * 1024) {
+		ElMessage.error('头像文件不能超过 500KB')
+		return false
+	}
+	return true
 }
 
 // 上传成功

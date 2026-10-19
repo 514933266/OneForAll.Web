@@ -35,15 +35,16 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import router from '@/untils/router.ts'
 import API from '@/apis/base-api.ts'
 import { IPersonalMenuTree } from '@/interfaces/IPersonalMenuTree'
 import { useMenuHistoryStore } from '@/stores/menuHistoryStore.ts'
+import { useBrowserStore } from '@/stores/browserStore.ts'
 
 const text = ref('')
 const menus = ref<IPersonalMenuTree[]>([]) // 原始菜单列表
 const results = ref<IPersonalMenuTree[]>([]) // 当前搜索记录
 const menuHistoryStore = useMenuHistoryStore()
+const browserStore = useBrowserStore()
 
 const historys = computed(() => {
   return menus.value?.filter(w => menuHistoryStore.historys.includes(w.Id))
@@ -67,7 +68,7 @@ function handleSelect(id: string) {
   const item = menus.value.find(w => w.Id === id)
   if (item && item?.Url.length > 0) {
     menuHistoryStore.add(item.Id)
-    router.push({ path: item.Url })
+    browserStore.navigate(item)
   }
 }
 

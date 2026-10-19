@@ -26,6 +26,10 @@ export const useBrowserStore = defineStore('browserStore', () => {
 		const exists = getTab(tab.Name)
 		if (!exists) {
 			addTab(tab)
+		} else {
+			// 已存在标签：同步更新 Url/Query（避免切换标签时回退到旧参数，如个股详情页股票代码）
+			exists.Url = tab.Url
+			exists.Query = tab.Query
 		}
 		activeName.value = tab.Name
 		if (tab.Params) {

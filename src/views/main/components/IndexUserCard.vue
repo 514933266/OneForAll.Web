@@ -78,20 +78,16 @@ const browserStore = useBrowserStore()
 function toPersonalPage() {
   browserStore.navigate(PERSONAL)
 }
-// 退出登录
+// 退出登录：本地登录态无条件清除，服务端登出仅尽力通知——
+// 接口异常（401/403/405 等）不能阻止本地退出，与智多星独立站同一口径
 function logout() {
   logouting.value = true
-  API.logout()
-    .then(res => {
-      if (res == 1) {
-        tokenStore.clearToken()
-        clientStore.clearClient()
-        logouting.value = false
-      }
-    })
-    .finally(() => {
-      router.push({ path: LOGIN.Url })
-    })
+  API.logout().catch(() => { })
+  tokenStore.clearToken()
+  clientStore.clearClient()
+  router.replace({ path: LOGIN.Url }).finally(() => {
+    logouting.value = false
+  })
 }
 
 onMounted(() => {

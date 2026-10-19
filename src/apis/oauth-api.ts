@@ -4,7 +4,7 @@ import { useClientStore } from '../stores/clientStore'
 import { ISysWebsite } from '../interfaces/sys/ISysWebsite'
 import { IBaseMessage } from '@/interfaces/IBaseMessage'
 
-const defaultHost = 'http://localhost:5081'
+const defaultHost = process.env.VUE_APP_DEFAULT_HOST || 'http://localhost:5081'
 const clientStore = useClientStore()
 
 const API = {

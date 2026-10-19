@@ -1,7 +1,24 @@
 // 基础
-html,
-* {
+// 注意：根字号只设在 html 上（勿写成 "html, *"——通配符会给每个元素直接声明 14px，
+// 导致所有靠继承生效的字号（如父容器 12px 下的 span）被强制拉成 14px，破坏页面字号体系）
+html {
 	font-size: 14px;
+}
+
+// 智多星工作台字号规范（市场行情/个股行情/我的地盘/行为画像/数据管理页统一遵循）：
+// 正文继承全局 14px；数据密集区正文 13px；辅助文字（表头/次要说明/时间戳）12px；
+// 角标/备注最小 11px（不再使用 10px 及以下）；区块标题 15-16px；重点大数字 20px+ ；
+// 所有数字展示区统一 font-variant-numeric: tabular-nums 等宽对齐
+:root {
+	--zdx-fs-min: 11px; // 最小字号（角标、备注、行内徽标）
+	--zdx-fs-aux: 12px; // 辅助文字（表头、次要说明、时间戳）
+	--zdx-fs-body: 13px; // 数据正文（表格、列表、键值对）
+	--zdx-fs-base: 14px; // 常规正文（继承全局）
+	--zdx-fs-title: 16px; // 区块标题
+
+	// Mac 风格圆角基线：控件 8px / 小元素 6px（弹窗浮层见下方独立规则）
+	--el-border-radius-base: 8px;
+	--el-border-radius-small: 6px;
 }
 
 body {
@@ -10,7 +27,7 @@ body {
 	margin: 0;
 	width: 100%;
 	height: 100%;
-	font-family: 'Microsoft YaHei', Arial, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
 }
 
 ul {
@@ -202,6 +219,13 @@ li {
 		flex-direction: column;
 		justify-content: space-between;
 		overflow-y: auto;
+		// 底部安全区：避免滚动到末尾时内容被 Windows 任务栏悬浮遮挡
+		padding-bottom: 64px;
+	}
+
+	.el-drawer__footer {
+		// 底部操作按钮抬高，避免被 Windows 任务栏悬浮遮挡
+		padding-bottom: 64px;
 	}
 
 	.el-form {
@@ -259,6 +283,7 @@ li {
 			background-color: transparent;
 		}
 
+		.el-table-fixed-column--left,
 		.el-table-fixed-column--right {
 			background-color:#ecf5ff !important;
 		}
@@ -273,11 +298,13 @@ li {
 
 // 对话框
 .ofa-dialog {
-	border-radius: 10px;
+	border-radius: 16px;
 
 	.el-dialog__header {
 		border-bottom: 1px solid #E4E7ED;
 		position: relative;
+		// 左侧蓝色装饰条占位（Element Plus 2.x 的 header 无左内边距，标题紧贴左缘会与装饰条重叠）
+		padding-left: 12px;
 		font-size: 16px;
 		color: #303133;
 
@@ -289,6 +316,8 @@ li {
 			height: 17px;
 			display: inline-block;
 			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
 			position: absolute;
 		}
 	}
@@ -346,7 +375,8 @@ li {
 
 // 消息弹窗
 .el-message-box {
-	border-radius: 10px;
+	border-radius: 16px;
+	box-shadow: 0 16px 48px rgba(31, 45, 61, 0.18);
 }
 
 #nprogress .bar,
@@ -375,6 +405,34 @@ body {
 }
 
 .el-dropdown-menu {
+	border-radius: 12px;
+}
+
+// ---------- Mac 风格弹窗圆角统一（未挂 ofa-dialog 类的弹窗也生效） ----------
+.el-dialog {
+	border-radius: 16px;
+	box-shadow: 0 16px 48px rgba(31, 45, 61, 0.18);
+	// 底部安全区：高弹窗滚动到底时按钮不被 Windows 任务栏悬浮遮挡（默认 50px 不足）
+	margin-bottom: 64px;
+
+	&.is-fullscreen {
+		border-radius: 0;
+	}
+}
+
+// 轻提示
+.el-message {
+	border-radius: 12px;
+}
+
+// 通知
+.el-notification {
+	border-radius: 16px;
+	box-shadow: 0 16px 48px rgba(31, 45, 61, 0.18);
+}
+
+// 气泡卡片
+.el-popover.el-popper {
 	border-radius: 12px;
 }
 

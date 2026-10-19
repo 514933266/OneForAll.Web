@@ -1,5 +1,5 @@
 <template>
-	<el-container class="login-page">
+	<el-container v-if="clientReady" class="login-page">
 		<el-main class="left-container">
 			<div ref="lottieContainer" class="lottie-container"></div>
 		</el-main>
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import router from '@/untils/router'
 import lottie from 'lottie-web'
 import { Md5 } from "ts-md5"
@@ -81,6 +81,7 @@ import { useTokenStore } from '@/stores/tokenStore'
 const clientStore = useClientStore()
 const tokenStore = useTokenStore()
 const lottieContainer = ref() // Lottie元素
+const clientReady = ref(false) // Current 获取客户端信息完成前不显示页面
 const loginTips = ref('') // 登录提示
 const logining = ref(false) // 正在登陆
 const year = new Date().getFullYear()
@@ -90,23 +91,28 @@ const base64CodeUrl = ref('') // 简单验证码图片
 const isRequiredCode = ref(false) // 是否需要验证码
 
 onMounted(() => {
-	lottie.loadAnimation({
-		container: lottieContainer.value, // 绑定dom节点
-		renderer: 'canvas', // 渲染方式:svg、canvas
-		loop: true, // 是否循环播放，默认：false
-		autoplay: true, // 是否自动播放, 默认true
-		animationData: lottieJson // AE动画使用bodymovie导出为json数据
-	})
 	initClient()
 })
 
-// 初始化客户端信息
+// 初始化客户端信息（Current 返回前不显示页面，避免客户端信息未就绪时闪烁）
 function initClient() {
 	API.getClient().then(res => {
 		clientStore.setClient(res)
 		if (!res.OAuthClientId) {
 			loginTips.value = '域名未注册授权'
 		}
+	}).finally(() => {
+		clientReady.value = true
+		// 页面放行渲染后再初始化 Lottie 动画（v-if 未放行时容器不存在）
+		nextTick(() => {
+			lottie.loadAnimation({
+				container: lottieContainer.value, // 绑定dom节点
+				renderer: 'canvas', // 渲染方式:svg、canvas
+				loop: true, // 是否循环播放，默认：false
+				autoplay: true, // 是否自动播放, 默认true
+				animationData: lottieJson // AE动画使用bodymovie导出为json数据
+			})
+		})
 	})
 }
 

@@ -9,7 +9,7 @@ import router from './untils/router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import '../src/assets/css/default.scss'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 // 字体库 Fontawesome
 import { library } from '@fortawesome/fontawesome-svg-core'

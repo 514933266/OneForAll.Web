@@ -12,6 +12,7 @@ const UMS = 'OneForAll.Ums'
 const JOB = 'OneForAll.ScheduleJob'
 const CHAT = 'OneForAll.ChatGPT'
 const OMS = 'OneForAll.Oms'
+const ZDX = 'OneForAll.ZhiDuoXing'
 
 export const useClientStore = defineStore('clientStore', () => {
 	const client = ref<ISysWebsite>()
@@ -31,6 +32,8 @@ export const useClientStore = defineStore('clientStore', () => {
 	const chatApi = computed(() => getApi(CHAT))
 	// 商户中心服务api
 	const omsApi = computed(() => getApi(OMS))
+	// 智多星（神策智投）服务api
+	const zdxApi = computed(() => getApi(ZDX))
 	// 更新客户端数据
 	function setClient(data: ISysWebsite) {
 		client.value = data
@@ -54,5 +57,5 @@ export const useClientStore = defineStore('clientStore', () => {
 		localStorage.removeItem(CACHE_NAME)
 	}
 
-	return { client, baseApi, oaApi, syslogApi, sysApi, umsApi, jobApi, chatApi, omsApi, setClient, getApi, clearClient }
+	return { client, baseApi, oaApi, syslogApi, sysApi, umsApi, jobApi, chatApi, omsApi, zdxApi, setClient, getApi, clearClient }
 })

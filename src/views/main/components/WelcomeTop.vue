@@ -46,7 +46,7 @@ import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from '@/stores/userStore'
 import { dayjs } from 'element-plus'
-import { IPersonalPersonStatistics } from '@/interfaces/IPersonalPersonStatistics.ts'
+import { IPersonalPersonStatistics } from '@/interfaces/IPersonalPersonStatistics'
 import API from '@/apis/oa-api'
 
 interface IToday {

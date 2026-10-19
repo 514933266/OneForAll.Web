@@ -58,9 +58,13 @@ function removeTab(tabName: any) {
 $toolbar-height: 44px;
 
 .index-browser {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
   .browser-tabs {
-    flex: 1;
+    flex: none;
     display: flex;
     flex-direction: column;
     font-size: 14px;
@@ -115,10 +119,17 @@ $toolbar-height: 44px;
 
   .browser-page {
     background: #f7f8fc;
-    height: 100%;
+    flex: 1;
+    min-height: 0;
     padding: 20px;
     overflow: hidden;
     overflow-y: auto;
+    // 底部安全区：滚动到末尾时预留空白，避免最底部内容被 Windows 任务栏悬浮遮挡
+    &::after {
+      content: '';
+      display: block;
+      height: 64px;
+    }
     :deep(.el-container) {
       margin-bottom: 100px;
     }
